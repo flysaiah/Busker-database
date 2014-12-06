@@ -32,7 +32,7 @@ class User(db.Model):
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
-	time = db.Column(db.DateTime)
+	time = db.Column(db.Text)
 	place = db.Column(db.Text)
 	owner = db.Column(db.Text)
 	attendees = db.relationship('User', secondary=attendings, backref='concerts')
