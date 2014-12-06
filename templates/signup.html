@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+{% extends "form_base.html" %}
 
 {% block form_items %}
 	<form method="POST">
-		{ form.hidden_tag() }}
+		{{ form.hidden_tag() }}
 		<div>
-			{{ form.new_email_password() }}
+			{{ form.new_email_username() }}
 		</div>
 
 		<div>
@@ -14,9 +14,9 @@
 		<div>
 			{{ form.performer_option() }}
 		</div>
+
+		<input type="submit" value="Go" />
 		
-
-
 	</form>
 
 
