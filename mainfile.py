@@ -6,6 +6,10 @@ app = Flask(__name__)
 app.debug = True
 app.config.from_object('config')
 
+@app.route('/')
+def frontpage():
+	return render_template('frontpage.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
