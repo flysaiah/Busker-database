@@ -5,6 +5,10 @@ from mainfile import app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///buskerdb.db'
 db = SQLAlchemy(app)
 
+performances = db.Table('performances', db.Column('email_of_performer', db.Text, db.ForeignKey('performer.performer_email')), db.Column('concert_id', db.Integer, db.ForeignKey('concert.generated_id')))
+favorites = db.Table('favorites', db.Column('p_email', db.Text, db.ForeignKey('performer.performer_email')), db.Column('u_email', db.Text, db.ForeignKey('user.user_email')))
+attendings = db.Table('attendings', db.Column('email_of_user', db.Text, db.ForeignKey('user.user_email')), db.Column('id_of_concert', db.Integer, db.ForeignKey('concert.generated_id')))
+
 class Performer(db.Model):
 	performer_email = db.Column(db.Text, primary_key=True)
 	name = db.Column(db.Text)
@@ -44,6 +48,3 @@ class Concert(db.Model):
 	def __repr__(self):
 		return '<Concert at {0}, {1}>'.format(self.place, self.time)
 
-performances = db.Table('performances', db.Column('email_of_performer', db.Text, db.ForeignKey('performer.performer_email')), db.Column('concert_id', db.Integer, db.ForeignKey('concert.generated_id')))
-favorites = db.Table('favorites', db.Column('p_email', db.Text, db.ForeignKey('performer.performer_email')), db.Column('u_email', db.Text, db.ForeignKey('user.user_email')))
-attendings = db.Table('attendings', db.Column('email_of_user', db.Text, db.ForeignKey('user.user_email')), db.Column('id_of_concert', db.Integer, db.ForeignKey('concert.generated_id')))
