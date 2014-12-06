@@ -24,3 +24,7 @@ def signup():
 	#if form.validate_on_submit():
 		#do something
 	return render_template('signup.html', form=form)
+
+@app.route('/signup/confirmed' methods=['POST'])
+def signupConfirmed():
+	return render_template('frontpage.html')
