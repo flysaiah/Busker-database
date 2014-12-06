@@ -1,2 +1,2 @@
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'isaiahisthecoolest'
+SECRET_KEY = 'kirbyisthecoolest'
