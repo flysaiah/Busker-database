@@ -1,10 +1,23 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block form_items %}
+	<form method="POST">
+		{ form.hidden_tag() }}
+		<div>
+			{{ form.new_email_password() }}
+		</div>
+
+		<div>
+			{{ form.new_password() }}
+		</div>
+
+		<div>
+			{{ form.performer_option() }}
+		</div>
+		
 
 
-
-
+	</form>
 
 
 {% endblock %}
