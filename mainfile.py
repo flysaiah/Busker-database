@@ -25,6 +25,6 @@ def signup():
 		#do something
 	return render_template('signup.html', form=form)
 
-@app.route('/signup/confirmed' methods=['POST'])
+@app.route('/signup/confirmed')
 def signupConfirmed():
 	return render_template('frontpage.html')
