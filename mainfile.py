@@ -1,5 +1,5 @@
 # This is the main file that is declared in the Procfile as our app
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for
 from forms import SignupForm, LoginForm, PerformerSignupForm
 from flask.ext.login import LoginManager, login_user, logout_user
 from flask.ext.sqlalchemy import *
@@ -134,10 +134,10 @@ def psignup():
 
 @app.route('/signup/confirmed')
 def signupConfirmed():
-	return redirect('frontpage.html')
+	return redirect(url_for('frontpage'))
 
 @app.route('/logout')
 @login_required
 def logout():
 	logout_user()
-	return redirect('frontpage.html')
+	return redirect(url_for('frontpage'))
