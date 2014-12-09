@@ -1,3 +1,4 @@
 flaskenv
 venv
 *.pyc
+*.4

@@ -1,21 +1,35 @@
 {% extends "form_base.html" %}
 
 {% block form_items %}
-	<form method="POST" action"/confirmed">
+	<form method="POST" action"/confirmed" class="form-horizontal">
 		{{ form.hidden_tag() }}
-		<div>
-			{{ form.new_email_username() }}
+		<div class="control-group">
+			<label class="control-label" for="new_email_username">Email</label>
+			<div class="controls">
+				{{ form.new_email_username(placeholder="Email") }}
+			</div>
 		</div>
 
-		<div>
-			{{ form.new_password() }}
+		<div class="control-group">
+			<label class="control-label" for="new_password">Password</label>
+			<div class="controls">
+				{{ form.new_password(placeholder="Password") }}
+			</div>
 		</div>
 
-		<div>
-			{{ form.performer_option() }}
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					{{ form.performer_option() }} Performer?
+				</label> 
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" value="Go" class="btn">Register</button>
+			</div>
 		</div>
 
-		<input type="submit" value="Go" />
 		
 	</form>
 
