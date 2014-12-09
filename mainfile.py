@@ -1,8 +1,9 @@
 # This is the main file that is declared in the Procfile as our app
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from forms import SignupForm, LoginForm, PerformerSignupForm
-from flask.ext.login import LoginManager
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.login import LoginManager, login_user, logout_user
+from flask.ext.sqlalchemy import *
+from flask.ext.security import login_required
 
 
 
@@ -29,7 +30,20 @@ class Performer(db.Model):
 		self.performer_password = performer_password
 	
 	def __repr__(self):
-		return '<Performer {0}>'.format(self.performer_email)	
+		return '<Performer {0}>'.format(self.performer_email)
+	def is_authenticated(self):
+		return True
+	def is_active(self):
+		return True
+	def is_anonymous(self):
+		return False
+	def get_id(self):
+		try:
+			return unicode(self.performer_email)
+		except NameError:
+			return str(self.performer_email)
+
+
 
 class User(db.Model):
 	user_email = db.Column(db.Text, primary_key=True)
@@ -41,6 +55,17 @@ class User(db.Model):
 		self.user_password = user_password
 	def __repr__(self):
 		return '<User {0}>'.format(self.user_email)
+	def is_authenticated(self):
+		return True
+	def is_active(self):
+		return True
+	def is_anonymous(self):
+		return False
+	def get_id(self):
+		try:
+			return unicode(self.user_email)
+		except NameError:
+			return str(self.user_email)
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
@@ -77,13 +102,11 @@ def login():
 			performer = Performer.query.get_or_404(form.email_username.data)
 			if form.password.data == performer.performer_password:
 				login_user(performer)
-				return render_template('frontpage.html')
 		else:
 			user = User.query.get_or_404(form.email_username.data)
-			if form.password == user.user_password:
+			if form.password.data == user.user_password:
 				login_user(user)
-				return render_template('frontpage.html')
-			return render_template('frontpage.html')
+		return render_template('frontpage.html')
 	return render_template('login.html', form=form)
 
 
@@ -111,4 +134,10 @@ def psignup():
 
 @app.route('/signup/confirmed')
 def signupConfirmed():
-	return render_template('frontpage.html')
+	return redirect('frontpage.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+	logout_user()
+	return redirect('frontpage.html')

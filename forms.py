@@ -16,5 +16,5 @@ class PerformerSignupForm(Form):
 class LoginForm(Form):
 	email_username = StringField('email_username', validators=[Required()])
 	password = PasswordField('password', validators=[Required()])
-	performer_option = BooleanField('performer_option', validators=[Required()])
+	performer_option = BooleanField('performer_option')
 	
