@@ -15,7 +15,7 @@ class Performer(db.Model):
 	performer_password = db.Column(db.Text)
 	performances = db.relationship('Concert', secondary=performances, backref='performers')
 
-	def __init__(self, name, performer_email, performer_password):
+	def __init__(self, performer_email, name, performer_password):
 		self.performer_email = performer_email
 		self.name = name
 		self.performer_password = performer_password
