@@ -88,7 +88,10 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(useremail):
-	return User.query.get(useremail)
+	if User.query.get(useremail) is None:
+		return Performer.query.get(useremail)
+	else:
+		return Performer.query.get(useremail)
 
 @app.route('/')
 def frontpage():
