@@ -1,36 +1,29 @@
 {% extends "form_base.html" %}
 
 {% block form_items %}
-	<form method="POST" action"/confirmed" class="form-horizontal">
+	<form method="POST" action"/confirmed" class="form-horizontal" role="form">
 		{{ form.hidden_tag() }}
-		<div class="control-group">
-			<label class="control-label" for="new_email_username">Email</label>
-			<div class="controls">
-				{{ form.new_email_username(placeholder="Email") }}
+		<div class="form-group">
+			<label for="new_email_username" class="col-sm-3 control-label">Email</label>
+			<div class="col-sm-9">
+				{{ form.new_email_username(class="form-control", placeholder="Email") }}
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label" for="new_password">Password</label>
-			<div class="controls">
-				{{ form.new_password(placeholder="Password") }}
+		<div class="form-group">
+			<label for="new_password" class="col-sm-3 control-label">Password</label>
+			<div class="col-sm-9">
+				{{ form.new_password(class="form-control", placeholder="Password") }}
 			</div>
 		</div>
 
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox">
-					Performer?
-				</label> 
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls">
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
 				<button type="submit" value="Go" class="btn">Register</button>
 			</div>
 		</div>
 
-		
+
 	</form>
 
 
