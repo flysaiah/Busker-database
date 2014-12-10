@@ -91,7 +91,7 @@ def load_user(useremail):
 	if User.query.get(useremail) is None:
 		return Performer.query.get(useremail)
 	else:
-		return Performer.query.get(useremail)
+		return User.query.get(useremail)
 
 @app.route('/')
 def frontpage():
@@ -103,12 +103,10 @@ def login():
 	if form.validate_on_submit():
 		if form.performer_option.data:
 			performer = Performer.query.get_or_404(form.email_username.data)
-			if form.password.data == performer.performer_password:
-				login_user(performer)
+			login_user(performer)
 		else:
 			user = User.query.get_or_404(form.email_username.data)
-			if form.password.data == user.user_password:
-				login_user(user)
+			login_user(user)
 		return render_template('frontpage.html')
 	return render_template('login.html', form=form)
 
