@@ -16,15 +16,6 @@
 				{{ form.new_password(class="form-control", placeholder="Password") }}
 			</div>
 		</div>
-		{% if form.performer_name %}
-			<div class="form-group">
-				<label for="new_password" class="col-sm-3 control-label">Performer Name</label>
-				<div class="col-sm-9">
-					{{ form.performer_name(class="form-control", placeholder="Performer Name") }}
-				</div>
-			</div>
-
-		{% endif %}
 
 		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-9">
@@ -32,9 +23,5 @@
 			</div>
 		</div>
 
-
-
 	</form>
-
-
 {% endblock %}
