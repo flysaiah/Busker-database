@@ -1,15 +1,8 @@
-from flask import redirect
-from tables import db, User, Performer, Concert
+import mainfile
 
-def validate_login(login_email, attempted_password):
-	user = User.query.get_or_404(login_email)
-	if attempted_password == user.password:
-		return True
-	return False
-
-def delete_account(login_email):
-	user = User.query.get_or_404(login_email)
-	db.session.delete(user)
-	db.session.confirm()
-	return redirect('/accountdeleted')
-
+def get_current_user(l_proxy):
+	if l_proxy.isPerformer:
+		cu = mainfile.Performer.query.get(l_proxy.performer_email)
+	else:
+		cu = mainfile.User.query.get(l_proxy.user_email)
+	return cu

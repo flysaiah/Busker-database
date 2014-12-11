@@ -153,23 +153,28 @@ def logout():
 
 @app.route('/deleteaccount')
 @login_required
-def deleteaccount():
-	logout_user()
-	db.session.delete(current_user)
-	db.session.commit()
-	flash("Account deletion successful")
-	return redirect(url_for('frontpage'))
+def confirmdeletion():
+	form = LoginForm()
+	if form.validate_on_submit():
+		currentuser = current_user._get_current_object()
+		logout_user()
+		db.session.delete(currentuser)
+		db.session.commit()
+		flash("Account deletion successful")
+		return redirect(url_for('frontpage'))
+	return render_template('confirmdeletion.html', form=form)
+
 
 @app.route('/favorites')
 @login_required
 def displayfavorites():
-	user = current_user
+	user = current_user._get_current_object()
 	favorite_performers = user.favorites
 	return render_template('favorites.html', favorite_performers=favorite_performers)
 
 @app.route('/followers')
 @login_required
 def displayfollowers():
-	performer = current_user
+	performer = current_user._get_current_object()
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)

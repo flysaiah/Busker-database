@@ -12,7 +12,6 @@ def passwordCheck(form, field):
 		person = mainfile.Performer.query.get(username)
 	else:
 		person = mainfile.User.query.get(username)
-		person_password = person.user_password
 
 	if person is None:
 		raise ValidationError("Sorry, we have no record of that username.")
