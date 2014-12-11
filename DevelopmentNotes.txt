@@ -8,3 +8,4 @@ Funcionality still missing:
 --Performers can delete concerts
 --Performers can delete performances
 --Performers can join concerts
+--Users/Performers can delete accounts
