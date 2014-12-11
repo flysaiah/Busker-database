@@ -3,6 +3,13 @@ from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError
 import mainfile
 
+def realPerformer(form, field):
+	names = form.addperformers.data
+	if names is not None:
+		names = names.replace(" ", "").split(",")
+		for name in names:
+			if mainfile.Performer.query.get(name) is None:
+				raise ValidationError("Sorry, we have no record of that performer.")
 
 def passwordCheck(form, field):
 	username = form.email_username.data
@@ -23,7 +30,10 @@ def passwordCheck(form, field):
 			if person.user_password != password:
 				raise ValidationError("Sorry, that password is incorrect.")
 
-
+class ConcertForm(Form):
+	time = StringField('time', validators=[Required()])
+	place = StringField('place', validators=[Required()])
+	addperformers = StringField('addperformers'), validators=[realPerformer()]
 
 
 class SignupForm(Form):

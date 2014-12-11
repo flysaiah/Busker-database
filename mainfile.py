@@ -1,6 +1,6 @@
 # This is the main file that is declared in the Procfile as our app
 from flask import Flask, render_template, redirect, url_for, flash
-from forms import SignupForm, LoginForm, PerformerSignupForm
+from forms import SignupForm, LoginForm, PerformerSignupForm, ConcertForm
 from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from flask.ext.sqlalchemy import *
 from flask.ext.security import login_required
@@ -88,8 +88,8 @@ class Concert(db.Model):
 		self.owner = owner
 	def __repr__(self):
 		return '<Concert at {0}, {1}>'.format(self.place, self.time)
-
-
+	def addPerformer(self, performer):
+		self.performers.append(performer)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -178,3 +178,37 @@ def displayfollowers():
 	performer = current_user._get_current_object()
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)
+
+@app.route('/createconcert')
+@login_required
+def createconcert():
+	form = ConcertForm()
+	if form.validate_on_submit():
+		newconcert = Concert(form.time.data, form.place.data, current_user._get_current_object().performer_email)
+		db.session.add(newconcert)
+		db.session.commit()
+		performers = []
+		performers.append(currentuser._get_current_object())
+		if form.addperformers.data is not None:
+			names = form.addperformers.data
+			names = names.replace(" ", "").split(",")
+			for name in names:
+				newperformer = Performer.query.get(name)
+				performers.append(newperformer)
+		for performer in performers:
+			db.session.add(newconcert.addPerformer())
+			db.session.commit()
+		flash("Concert created successfully")
+		return redirect(url_for('frontpage'))
+	return render_template('createconcert.html', form=form)
+
+
+
+
+
+
+
+
+
+
+
