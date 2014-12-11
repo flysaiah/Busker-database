@@ -10,15 +10,19 @@ def passwordCheck(form, field):
 
 	if form.performer_option.data:
 		person = mainfile.Performer.query.get(username)
-		person_password = person.performer_password
 	else:
 		person = mainfile.User.query.get(username)
 		person_password = person.user_password
 
 	if person is None:
 		raise ValidationError("Sorry, we have no record of that username.")
-	elif person_password != password:
-		raise ValidationError("Sorry, that password is incorrect.")
+	else:
+		if form.performer_option.data:
+			if person.performer_password != password:
+				raise ValidationError("Sorry, that password is incorrect.")
+		else:
+			if person.user_password != password:
+				raise ValidationError("Sorry, that password is incorrect.")
 
 
 
