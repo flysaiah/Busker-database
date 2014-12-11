@@ -74,6 +74,8 @@ class User(db.Model):
 			return self
 	def has_favorited(self, performer):
 		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
+	def followed_concerts(self):
+		return Concert.query.join(favorites, (favorites.c.p_email == Performer.performer_email)).filter(favorites.c.u_email == self.user_email)
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
@@ -179,6 +181,12 @@ def displayfollowers():
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)
 
+@app.route('/concerts')
+@login_required
+def displayconcerts():
+	user = current_user._get_current_object()
+	concerts
+
 @app.route('/createconcert')
 @login_required
 def createconcert():
@@ -201,6 +209,8 @@ def createconcert():
 		flash("Concert created successfully")
 		return redirect(url_for('frontpage'))
 	return render_template('createconcert.html', form=form)
+
+
 
 
 

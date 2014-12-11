@@ -3,6 +3,10 @@ from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError
 import mainfile
 
+def semiOptional(form, field):
+	if field.data is None and form.byperformer.data is None:
+		raise ValidationError("Sorry, you must fill in at least one of the fields.")
+
 def realPerformer(form, field):
 	names = form.addperformers.data
 	if names is not None:
@@ -10,6 +14,12 @@ def realPerformer(form, field):
 		for name in names:
 			if mainfile.Performer.query.get(name) is None:
 				raise ValidationError("Sorry, we have no record of that performer.")
+
+def realPerformerName(form, field):
+	pname = field.data
+	if name is not None:
+		if mainfile.Performer.query.filte_by(name=pname).all() is None:
+			raise ValidationError("Sorry, we have no record of that performer.")
 
 def passwordCheck(form, field):
 	username = form.email_username.data
@@ -52,4 +62,6 @@ class LoginForm(Form):
 	password = PasswordField('password', validators=[Required(), passwordCheck])
 	performer_option = BooleanField('performer_option')
 	
-
+class ConcertSearchForm(Form):
+	byperformer = StringField('byperformer', validators=[realPerformer])
+	bylocation = StringField('bylocation', validators=[semiOptional])
