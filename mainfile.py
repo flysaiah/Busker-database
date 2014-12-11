@@ -181,11 +181,22 @@ def displayfollowers():
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)
 
-@app.route('/concerts')
-@login_required
-def displayconcerts():
-	user = current_user._get_current_object()
-	concerts
+@app.route('/search/concerts')
+def searchconcerts():
+	form = ConcertSearchForm()
+	if form.validate_on_submit():
+		if form.byperformer.data is not None:
+			'''if form.bylocation.data is not None:
+				performer = Performer.query.filter_by(name=form.byperformer.data).first()
+				concerts = performer.performances
+				for performance in concerts:''' #Will finish once I figure out location
+			#else:
+			performer = Performer.query.filter_by(name=form.byperformer.data).first()
+			concerts = performer.performances
+			return render_template('concerts.html', concerts=concerts)
+		#else:
+			#Just location stuff
+	return render_template('searchconcerts.html')
 
 @app.route('/createconcert')
 @login_required
