@@ -22,7 +22,7 @@ class Performer(db.Model):
 	performer_email = db.Column(db.Text, primary_key=True)
 	name = db.Column(db.Text)
 	performer_password = db.Column(db.Text)
-	performances = db.relationship('Concert', secondary=performances, backref='performers')
+	performances = db.relationship('Concert', secondary=performances, backref=db.backref('performers', lazy='dynamic'), lazy='dynamic')
 
 	def __init__(self, performer_email, name, performer_password):
 		self.performer_email = performer_email
@@ -46,7 +46,7 @@ class Performer(db.Model):
 class User(db.Model):
 	user_email = db.Column(db.Text, primary_key=True)
 	user_password = db.Column(db.Text)
-	favorites = db.relationship('Performer', secondary=favorites, backref='followers')
+	favorites = db.relationship('Performer', secondary=favorites, backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
 	def __init__(self, user_email, user_password):
 		self.user_email = user_email
@@ -82,7 +82,7 @@ class Concert(db.Model):
 	time = db.Column(db.Text)
 	place = db.Column(db.Text)
 	owner = db.Column(db.Text)
-	attendees = db.relationship('User', secondary=attendings, backref='concerts')
+	attendees = db.relationship('User', secondary=attendings, backref=db.backref('concerts', lazy='dynamic'), lazy='dynamic')
 
 	def __init__(self, time, place, owner):
 		self.time = time

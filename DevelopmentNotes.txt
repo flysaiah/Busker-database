@@ -3,9 +3,5 @@ Problems:
 
 Funcionality still missing:
 --Users search for performers to favorite
---Performers create concerts
---Users can see what concerts their favorited performers created
---Performers can delete concerts
 --Performers can delete performances
---Performers can join concerts
---Users/Performers can delete accounts
+--Performers can edit concerts
