@@ -42,6 +42,8 @@ class Performer(db.Model):
 			return unicode(self.performer_email)
 		except NameError:
 			return str(self.performer_email)
+	def isPerformer():
+		return True
 
 class User(db.Model):
 	user_email = db.Column(db.Text, primary_key=True)
@@ -76,6 +78,8 @@ class User(db.Model):
 		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
 	def followed_concerts(self):
 		return Concert.query.join(favorites, (favorites.c.p_email == Performer.performer_email)).filter(favorites.c.u_email == self.user_email)
+	def isPerformer():
+		return False
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
@@ -166,7 +170,6 @@ def confirmdeletion():
 		return redirect(url_for('frontpage'))
 	return render_template('confirmdeletion.html', form=form)
 
-
 @app.route('/favorites')
 @login_required
 def displayfavorites():
@@ -181,11 +184,52 @@ def displayfollowers():
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)
 
-@app.route('/concerts')
+@app.route('/favorite/<performer_email>')
 @login_required
-def displayconcerts():
+def followperformer(performer_email):
+	performer = Performer.query.get_or_404(performer_email)
 	user = current_user._get_current_object()
-	concerts
+	if user.isPerformer():
+		flash("Performers cannot favorite/unfavorite other performers; please create a user account")
+		return redirect(url_for('frontpage'))
+	else:
+		favorite_object = user.favorite(performer)
+		db.session.add(favorite_object)
+		db.session.commit()
+		flash("Successfully favorited " + str(performer.name))
+		return redirect(url_for('frontpage')) #Eventually will redirect to wherever the favoriting page is
+
+@app.route('/unfavorite/<performer_email>')
+@login_required
+def unfollowperformer(performer_email):
+	performer = Performer.query.get_or_404(performer_email)
+	user = current_user._get_current_object()
+	if user.isPerformer():
+		flash("Performers cannot favorite/unfavorite")
+		return redirect(url_for('frontpage'))
+	else:
+		unfavorite_object = user.unfavorite(performer)
+		db.session.add(unfavorite_object)
+		db.session.commit()
+		flash("Successfully unfavorited " + str(performer.name))
+		return redirect(url_for('favorites'))
+
+@app.route('/search/concerts')
+def searchconcerts():
+	form = ConcertSearchForm()
+	if form.validate_on_submit():
+		if form.byperformer.data is not None:
+			'''if form.bylocation.data is not None:
+				performer = Performer.query.filter_by(name=form.byperformer.data).first()
+				concerts = performer.performances
+				for performance in concerts:''' #Will finish once I figure out location
+			#else:
+			performer = Performer.query.filter_by(name=form.byperformer.data).first()
+			concerts = performer.performances
+			return render_template('concerts.html', concerts=concerts)
+		#else:
+			#Just location stuff
+	return render_template('searchconcerts.html')
 
 @app.route('/createconcert')
 @login_required
@@ -201,7 +245,7 @@ def createconcert():
 			names = form.addperformers.data
 			names = names.replace(" ", "").split(",")
 			for name in names:
-				newperformer = Performer.query.get(name)
+				newperformer = Performer.query.get_or_404(name)
 				performers.append(newperformer)
 		for performer in performers:
 			db.session.add(newconcert.addPerformer())
