@@ -1,5 +1,9 @@
 {% extends "form_base.html" %}
 
+{% block form_header %}
+	<h3>Login</h3>
+{% endblock %}
+
 {% block form_items %}
 	<form method="POST" action"/confirmed" class="form-horizontal" role="form">
 		{{ form.hidden_tag() }}
