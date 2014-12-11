@@ -1,4 +1,10 @@
-1. Fix performer login
-2. Performers create Concerts
-3. Users follow performers
-4. Do a better job of checking username/password
+Problems:
+--Validator messages not showing
+
+Funcionality still missing:
+--Users search for performers to favorite
+--Performers create concerts
+--Users can see what concerts their favorited performers created
+--Performers can delete concerts
+--Performers can delete performances
+--Performers can join concerts
