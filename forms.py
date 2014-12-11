@@ -33,7 +33,7 @@ def passwordCheck(form, field):
 class ConcertForm(Form):
 	time = StringField('time', validators=[Required()])
 	place = StringField('place', validators=[Required()])
-	addperformers = StringField('addperformers', validators=[realPerformer()])
+	addperformers = StringField('addperformers', validators=[realPerformer])
 
 
 class SignupForm(Form):
