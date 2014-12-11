@@ -1,7 +1,7 @@
 # This is the main file that is declared in the Procfile as our app
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 from forms import SignupForm, LoginForm, PerformerSignupForm
-from flask.ext.login import LoginManager, login_user, logout_user
+from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from flask.ext.sqlalchemy import *
 from flask.ext.security import login_required
 
@@ -43,8 +43,6 @@ class Performer(db.Model):
 		except NameError:
 			return str(self.performer_email)
 
-
-
 class User(db.Model):
 	user_email = db.Column(db.Text, primary_key=True)
 	user_password = db.Column(db.Text)
@@ -66,6 +64,16 @@ class User(db.Model):
 			return unicode(self.user_email)
 		except NameError:
 			return str(self.user_email)
+	def favorite(self, performer):
+		if not self.has_favorited(performer):
+			self.favorites.append(performer)
+			return self
+	def unfavorite(self, performer):
+		if self.has_favorited(performer):
+			self.favorites.remove(performer)
+			return self
+	def has_favorited(self, performer):
+		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
@@ -91,7 +99,7 @@ def load_user(useremail):
 	if User.query.get(useremail) is None:
 		return Performer.query.get(useremail)
 	else:
-		return Performer.query.get(useremail)
+		return User.query.get(useremail)
 
 @app.route('/')
 def frontpage():
@@ -103,12 +111,10 @@ def login():
 	if form.validate_on_submit():
 		if form.performer_option.data:
 			performer = Performer.query.get_or_404(form.email_username.data)
-			if form.password.data == performer.performer_password:
-				login_user(performer)
+			login_user(performer)
 		else:
 			user = User.query.get_or_404(form.email_username.data)
-			if form.password.data == user.user_password:
-				login_user(user)
+			login_user(user)
 		return render_template('frontpage.html')
 	return render_template('login.html', form=form)
 
@@ -144,3 +150,26 @@ def signupConfirmed():
 def logout():
 	logout_user()
 	return redirect(url_for('frontpage'))
+
+@app.route('/deleteaccount')
+@login_required
+def deleteaccount():
+	logout_user()
+	db.session.delete(current_user)
+	db.session.commit()
+	flash("Account deletion successful")
+	return redirect(url_for('frontpage'))
+
+@app.route('/favorites')
+@login_required
+def displayfavorites():
+	user = current_user
+	favorite_performers = user.favorites
+	return render_template('favorites.html', favorite_performers=favorite_performers)
+
+@app.route('/followers')
+@login_required
+def displayfollowers():
+	performer = current_user
+	followers = performer.followers
+	return render_template('followers.html', followers=followers)
