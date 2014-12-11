@@ -4,7 +4,6 @@ from forms import SignupForm, LoginForm, PerformerSignupForm
 from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from flask.ext.sqlalchemy import *
 from flask.ext.security import login_required
-from tables import db, User, Performer, Concert
 
 
 
