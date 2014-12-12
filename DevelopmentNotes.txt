@@ -2,6 +2,4 @@ Problems:
 --Validator messages not showing
 
 Funcionality still missing:
---Users search for performers to favorite
 --Performers can delete performances
---Performers can edit concerts

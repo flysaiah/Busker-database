@@ -121,7 +121,7 @@ def unfollowperformer(performer_email):
 		db.session.add(unfavorite_object)
 		db.session.commit()
 		flash("Successfully unfavorited " + str(performer.name))
-		return redirect(url_for('favorites'))
+		return redirect('/favorites')
 
 @app.route('/search/performer')
 def searchperformer():
@@ -131,7 +131,17 @@ def searchperformer():
 		return render_template('performerpage.html', performer=performer)
 	return render_template('performersearch.html')
 
+@app.route('/all-concerts')
+def displayallconcerts():
+	concerts = []
+	for performer in Performer.query.all():
+		for performance in performer.performances:
+			concerts.append(performance)
+	return render_template('concerts.html', concerts=concerts)
 
+@app.route('/special/easteregg')
+def specialfunction():
+	return render_template('easteregg.html')
 
 @app.route('/search/concerts')
 def searchconcerts():
@@ -153,6 +163,9 @@ def searchconcerts():
 @app.route('/createconcert')
 @login_required
 def createconcert():
+	if not current_user._get_current_object().isPerformer():
+		flash("Non-performers cannot create concerts")
+		return redirect(url_for('frontpage'))
 	form = ConcertForm()
 	if form.validate_on_submit():
 		newconcert = Concert(form.time.data, form.place.data, current_user._get_current_object().performer_email)
@@ -214,3 +227,22 @@ def editconcert(concert_id):
 		flash("Concert edited successfully")
 		return redirect(url_for('frontpage'))
 	return render_template('editconcert.html', form=form)
+
+@app.route('/deleteconcert/<concert_id>')
+@login_required
+def deleteconcert(concert_id):
+	currentuser = current_user._get_current_object()
+	performeremail = currentuser.performer_email
+	if not currentuser.isPerformer():
+		flash("Non-performers cannot delete concerts.")
+		return redirect(url_for('frontpage'))
+	concert = Concert.query.get_or_404(concert_id)
+	if performeremail != concert.owner:
+		flash("You are not the owner of this concert")
+		return redirect(url_for('concerts', performeremail=performeremail))
+	else:
+		db.session.delete(concert)
+		db.session.commit()
+		flash("Concert successfully deleted")
+		return redirect(url_for('concerts', performeremail=performeremail))
+	
