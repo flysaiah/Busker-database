@@ -235,8 +235,8 @@ def searchconcerts():
 				for performance in concerts:''' #Will finish once I figure out location
 			#else:
 			performer = Performer.query.filter_by(name=form.byperformer.data).first()
-			concerts = performer.performances
-			return render_template('concerts.html', concerts=concerts)
+			performeremail = performer.performer_email
+			return redirect(url_for('concerts', performeremail=performeremail))
 		#else:
 			#Just location stuff
 	return render_template('searchconcerts.html')
@@ -263,6 +263,50 @@ def createconcert():
 		flash("Concert created successfully")
 		return redirect(url_for('frontpage'))
 	return render_template('createconcert.html', form=form)
+
+@app.route('/concerts/<performeremail>')
+def concertsbyperformer(performeremail):
+	performer = Performer.query.filter_by(performer_email=performeremail).first()
+	concerts = performer.performances
+	return render_template('concerts.html', concerts=concerts)
+
+@app.route('edit/concert/<concert_id>')
+@login_required
+if not current_user._get_current_object().isPerformer():
+	flash("Non-performers cannot edit concerts")
+	return redirect(url_for('frontpage'))
+def editconcert(concert_id):
+	concert = Concert.query.get_or_404(concert_id)
+	form = ConcertForm()
+	form.time.data = concert.time
+	form.place.data = concert.place
+	performerstring = ""
+	for performer in concert.performers:
+		performerstring = performerstring + performer.name + ","
+	performerstring = performerstring[:-1]
+	form.addperformers.data = performerstring
+	if form.validate_on_submit():
+		db.session.delete(concert)
+		db.session.commit()
+		newconcert = Concert(form.time.data, form.place.data, current_user._get_current_object().performer_email)
+		db.session.add(newconcert)
+		db.session.commit()
+		performers = []
+		performers.append(currentuser._get_current_object())
+		if form.addperformers.data is not None:
+			names = form.addperformers.data
+			names = names.replace(" ", "").split(",")
+			for name in names:
+				newperformer = Performer.query.get_or_404(name)
+				performers.append(newperformer)
+		for performer in performers:
+			db.session.add(newconcert.addPerformer())
+			db.session.commit()
+		flash("Concert edited successfully")
+		return redirect(url_for('frontpage'))
+	return render_template('editconcert.html', form=form)
+
+
 
 
 
