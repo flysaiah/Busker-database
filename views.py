@@ -179,12 +179,12 @@ def concertsbyperformer(performeremail):
 	concerts = performer.performances
 	return render_template('concerts.html', concerts=concerts)
 
-@app.route('edit/concert/<concert_id>')
+@app.route('/edit/concert/<concert_id>')
 @login_required
-if not current_user._get_current_object().isPerformer():
-	flash("Non-performers cannot edit concerts")
-	return redirect(url_for('frontpage'))
 def editconcert(concert_id):
+	if not current_user._get_current_object().isPerformer():
+		flash("Non-performers cannot edit concerts")
+		return redirect(url_for('frontpage'))
 	concert = Concert.query.get_or_404(concert_id)
 	form = ConcertForm()
 	form.time.data = concert.time
