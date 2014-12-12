@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError
-import mainfile
+from model import db, User, Performer, Concert
 
 def semiOptional(form, field):
 	if field.data is None and form.byperformer.data is None:
@@ -12,13 +12,13 @@ def realPerformer(form, field):
 	if names is not None:
 		names = names.replace(" ", "").split(",")
 		for name in names:
-			if mainfile.Performer.query.get(name) is None:
+			if Performer.query.get(name) is None:
 				raise ValidationError("Sorry, we have no record of that performer.")
 
 def realPerformerName(form, field):
 	pname = field.data
 	if name is not None:
-		if mainfile.Performer.query.filte_by(name=pname).all() is None:
+		if Performer.query.filte_by(name=pname).all() is None:
 			raise ValidationError("Sorry, we have no record of that performer.")
 
 def passwordCheck(form, field):
@@ -26,9 +26,9 @@ def passwordCheck(form, field):
 	password = form.password.data
 
 	if form.performer_option.data:
-		person = mainfile.Performer.query.get_or_404(username)
+		person = Performer.query.get_or_404(username)
 	else:
-		person = mainfile.User.query.get_or_404(username)
+		person = User.query.get_or_404(username)
 
 	if person is None:
 		raise ValidationError("Sorry, we have no record of that username.")
