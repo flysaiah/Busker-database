@@ -1,6 +1,6 @@
 # This is the main file that is declared in the Procfile as our app
 from flask import Flask, render_template, redirect, url_for, flash
-from forms import SignupForm, LoginForm, PerformerSignupForm, ConcertForm
+from forms import SignupForm, LoginForm, PerformerSignupForm, ConcertForm, ConcertSearchForm, PerformerSearchForm
 from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from flask.ext.sqlalchemy import *
 from flask.ext.security import login_required
@@ -213,6 +213,16 @@ def unfollowperformer(performer_email):
 		db.session.commit()
 		flash("Successfully unfavorited " + str(performer.name))
 		return redirect(url_for('favorites'))
+
+@app.route('/search/performer')
+def searchperformer():
+	form = PerformerSearchForm()
+	if form.validate_on_submit():
+		performer = Performer.query.filter_by(name=form.performername.data).first()
+		return render_template('performerpage.html', performer=performer)
+	return render_template('performersearch.html')
+
+
 
 @app.route('/search/concerts')
 def searchconcerts():

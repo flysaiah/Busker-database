@@ -63,5 +63,8 @@ class LoginForm(Form):
 	performer_option = BooleanField('performer_option')
 	
 class ConcertSearchForm(Form):
-	byperformer = StringField('byperformer', validators=[realPerformer])
+	byperformer = StringField('byperformer', validators=[realPerformerName])
 	bylocation = StringField('bylocation', validators=[semiOptional])
+
+class PerformerSearchForm(Form):
+	performername = StringField('performername', validators=[Required(), realPerformerName])
