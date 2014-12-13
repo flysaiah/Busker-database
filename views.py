@@ -66,7 +66,7 @@ def logout():
 	logout_user()
 	return redirect(url_for('frontpage'))
 
-@app.route('/deleteaccount')
+@app.route('/deleteaccount', methods=['GET', 'POST'])
 @login_required
 def confirmdeletion():
 	form = LoginForm()
@@ -129,7 +129,7 @@ def unfollowperformer(performer_email):
 		flash("Successfully unfavorited " + str(performer.name))
 		return redirect('/favorites')
 
-@app.route('/search/performer')
+@app.route('/search/performer', methods=['GET', 'POST'])
 def searchperformer():
 	form = PerformerSearchForm()
 	if form.validate_on_submit():
@@ -159,7 +159,7 @@ def displayallconcerts():
 def specialfunction():
 	return render_template('easteregg.html')
 
-@app.route('/search/concerts')
+@app.route('/search/concerts', methods=['GET', 'POST'])
 def searchconcerts():
 	form = ConcertSearchForm()
 	if form.validate_on_submit():  #Will convert this into a controller function
@@ -187,7 +187,7 @@ def searchconcerts():
 		return render_template('concerts.html', concerts=concerts)
 	return render_template('searchconcerts.html')
 
-@app.route('/createconcert')
+@app.route('/createconcert', methods=['GET', 'POST'])
 @login_required
 def createconcert():
 	if not current_user._get_current_object().isPerformer():
@@ -219,7 +219,7 @@ def concertsbyperformer(performeremail):
 	concerts = performer.performances
 	return render_template('concerts.html', concerts=concerts)
 
-@app.route('/edit/concert/<concert_id>')
+@app.route('/edit/concert/<concert_id>', methods=['GET', 'POST'])
 @login_required
 def editconcert(concert_id):
 	if not current_user._get_current_object().isPerformer():
