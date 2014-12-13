@@ -2,3 +2,4 @@ flaskenv
 venv
 *.pyc
 *.4
+*.db
