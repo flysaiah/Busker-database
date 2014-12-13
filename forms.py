@@ -19,7 +19,7 @@ def realPerformer(form, field):
 
 def realPerformerName(form, field):
 	pname = field.data
-	if name is not None:
+	if pname is not None:
 		if Performer.query.filte_by(name=pname).all() is None:
 			raise ValidationError("Sorry, we have no record of that performer.")
 

@@ -134,7 +134,7 @@ def searchperformer():
 	if form.validate_on_submit():
 		performer = Performer.query.filter_by(name=form.performername.data).first()
 		return render_template('performerpage.html', performer=performer)
-	return render_template('performersearch.html')
+	return render_template('performersearch.html', form=form)
 
 @app.route('/upcoming-concerts')
 @login_required
