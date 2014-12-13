@@ -3,6 +3,8 @@ from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError
 from model import db, User, Performer, Concert
 
+#def uniquecheck(form, field):
+
 def semiOptional(form, field):
 	if field.data is None and form.bycity.data is None and form.bystate.data is None and form.byperformer.data is None:
 		raise ValidationError("Sorry, you must fill in at least one of the fields.")
@@ -30,10 +32,13 @@ def passwordCheck(form, field):
 	else:
 		person = User.query.get_or_404(username)
 
+
 	if person is None:
 		raise ValidationError("Sorry, we have no record of that username.")
 	else:
-		if form.performer_option.data:
+		if not person.is_active():
+			raise ValidationError("Sorry, we have no record of that username.")
+		elif form.performer_option.data:
 			if person.performer_password != password:
 				raise ValidationError("Sorry, that password is incorrect.")
 		else:
