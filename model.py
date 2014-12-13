@@ -71,15 +71,19 @@ class User(db.Model):
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
 	time = db.Column(db.Text)
-	place = db.Column(db.Text)
+	streetaddress = db.Column(db.Text)
+	city = db.Column(db.Text)
+	state = db.Column(db.Text)
 	owner = db.Column(db.Text)
 	attendees = db.relationship('User', secondary=attendings, backref=db.backref('concerts', lazy='dynamic'), lazy='dynamic')
 
-	def __init__(self, time, place, owner):
+	def __init__(self, time, streetaddress, city, state, owner):
 		self.time = time
-		self.place = place
+		self.streetaddress = streetaddress
+		self.city = city
+		self.state = state
 		self.owner = owner
 	def __repr__(self):
-		return '<Concert at {0}, {1}>'.format(self.place, self.time)
+		return '<Concert at {0}, {1}>'.format(self.streetaddress, self.time)
 	def addPerformer(self, performer):
 		self.performers.append(performer)

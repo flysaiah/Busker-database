@@ -146,18 +146,29 @@ def specialfunction():
 @app.route('/search/concerts')
 def searchconcerts():
 	form = ConcertSearchForm()
-	if form.validate_on_submit():
+	if form.validate_on_submit():  #Will convert this into a controller function
+		foundperformances = []
 		if form.byperformer.data is not None:
-			'''if form.bylocation.data is not None:
-				performer = Performer.query.filter_by(name=form.byperformer.data).first()
-				concerts = performer.performances
-				for performance in concerts:''' #Will finish once I figure out location
-			#else:
 			performer = Performer.query.filter_by(name=form.byperformer.data).first()
-			performeremail = performer.performer_email
-			return redirect(url_for('concerts', performeremail=performeremail))
-		#else:
-			#Just location stuff
+			for performance in performer.performances:
+				foundperformances.append(performance)
+		else:
+			foundperformances = Concert.query.all()
+
+		if form.bystreetaddress.data is not None:
+			for performance in foundperformances:
+				if performance.streetaddress != form.streetaddress.data:
+					foundperformances.remove(performance)
+		if form.bycity.data is not None:
+			for performance in foundperformances:
+				if performance.city != form.bycity.data:
+					foundperformances.remove(performance)
+		if form.bystate.data is not None:
+			for performance in foundperformances:
+				if performance.state != form.bystate.data:
+					foundperformances.remove(performance)
+		concerts = foundperformances
+		return render_template('concerts.html', concerts=concerts)
 	return render_template('searchconcerts.html')
 
 @app.route('/createconcert')
@@ -168,7 +179,7 @@ def createconcert():
 		return redirect(url_for('frontpage'))
 	form = ConcertForm()
 	if form.validate_on_submit():
-		newconcert = Concert(form.time.data, form.place.data, current_user._get_current_object().performer_email)
+		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
 		db.session.add(newconcert)
 		db.session.commit()
 		performers = []
@@ -201,7 +212,7 @@ def editconcert(concert_id):
 	concert = Concert.query.get_or_404(concert_id)
 	form = ConcertForm()
 	form.time.data = concert.time
-	form.place.data = concert.place
+	form.streetaddress.data = concert.streetaddress
 	performerstring = ""
 	for performer in concert.performers:
 		performerstring = performerstring + performer.name + ","
@@ -210,7 +221,7 @@ def editconcert(concert_id):
 	if form.validate_on_submit():
 		db.session.delete(concert)
 		db.session.commit()
-		newconcert = Concert(form.time.data, form.place.data, current_user._get_current_object().performer_email)
+		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data current_user._get_current_object().performer_email)
 		db.session.add(newconcert)
 		db.session.commit()
 		performers = []

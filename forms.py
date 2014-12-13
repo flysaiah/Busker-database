@@ -4,7 +4,7 @@ from wtforms.validators import Required, ValidationError
 from model import db, User, Performer, Concert
 
 def semiOptional(form, field):
-	if field.data is None and form.byperformer.data is None:
+	if field.data is None and form.bycity.data is None and form.bystate.data is None and form.byperformer.data is None:
 		raise ValidationError("Sorry, you must fill in at least one of the fields.")
 
 def realPerformer(form, field):
@@ -42,7 +42,9 @@ def passwordCheck(form, field):
 
 class ConcertForm(Form):
 	time = StringField('time', validators=[Required()])
-	place = StringField('place', validators=[Required()])
+	streetaddress = StringField('streetaddress', validators=[Required()])
+	city = StringField('city', validators=[Required()])
+	state = StringField('state', validators=[Required()])
 	addperformers = StringField('addperformers', validators=[realPerformer])
 
 
@@ -64,7 +66,9 @@ class LoginForm(Form):
 	
 class ConcertSearchForm(Form):
 	byperformer = StringField('byperformer', validators=[realPerformerName])
-	bylocation = StringField('bylocation', validators=[semiOptional])
+	bystreetaddress = StringField('bystreetaddress', validators=[semiOptional])
+	bycity = StringField('bycity')
+	bystate = StringField('bystate')
 
 class PerformerSearchForm(Form):
 	performername = StringField('performername', validators=[Required(), realPerformerName])
