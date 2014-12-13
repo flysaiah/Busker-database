@@ -26,6 +26,15 @@ nav .navbar-toggle {
   font-size: 30px;
 }
 
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+
 
 
 nav.navbar.shrink {
