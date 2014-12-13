@@ -3,9 +3,14 @@
 
 
 {% block form_items %}
-	<form method="POST" action"/confirmed" class="form-horizontal form-center" role="form">
+	<form method="POST" action="" class="form-horizontal form-center" role="form">
 
-		<h2 class="form-center-heading">Login</h2>
+
+		{% if delete %}
+			<h3 class="form-center-heading">Confirm login to delete</h3>
+		{% else %}
+			<h2 class="form-center-heading">Login</h2>
+		{% endif %}
 
 		{{ form.hidden_tag() }}
 		<div class="form-group">
@@ -27,8 +32,9 @@
 			<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Login</button>
 		</div>
 
-
-		<a href="/signup"><h4 class="form-center-heading">New? Sign up here!</h4></a>
+		{% if not delete %}
+			<a href="/signup"><h4 class="form-center-heading">New? Sign up here!</h4></a>
+		{% endif %}
 
 
 	</form>
