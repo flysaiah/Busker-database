@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+	<div>
+		<p>{% performer.name %}</p>
+	</div>
+
+	<a href="/favorite/{% performer.performer_email %}">Favorite this performer</a>
+
+
+
+
+{% endblock %}
