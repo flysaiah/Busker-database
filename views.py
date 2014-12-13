@@ -221,7 +221,7 @@ def editconcert(concert_id):
 	if form.validate_on_submit():
 		db.session.delete(concert)
 		db.session.commit()
-		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data current_user._get_current_object().performer_email)
+		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
 		db.session.add(newconcert)
 		db.session.commit()
 		performers = []
