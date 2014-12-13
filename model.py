@@ -15,13 +15,14 @@ class Performer(db.Model):
 		self.performer_email = performer_email
 		self.name = name
 		self.performer_password = performer_password
+		self.active = True
 	
 	def __repr__(self):
 		return '<Performer {0}>'.format(self.performer_email)
 	def is_authenticated(self):
 		return True
 	def is_active(self):
-		return True
+		return self.active
 	def is_anonymous(self):
 		return False
 	def get_id(self):
@@ -29,6 +30,10 @@ class Performer(db.Model):
 			return unicode(self.performer_email)
 		except NameError:
 			return str(self.performer_email)
+	def deactivate(self):
+		self.active = False
+	def reactivate(self):
+		self.active = True
 	def isPerformer():
 		return True
 
@@ -40,12 +45,13 @@ class User(db.Model):
 	def __init__(self, user_email, user_password):
 		self.user_email = user_email
 		self.user_password = user_password
+		self.active = True
 	def __repr__(self):
 		return '<User {0}>'.format(self.user_email)
 	def is_authenticated(self):
 		return True
 	def is_active(self):
-		return True
+		return self.active
 	def is_anonymous(self):
 		return False
 	def get_id(self):
@@ -53,6 +59,10 @@ class User(db.Model):
 			return unicode(self.user_email)
 		except NameError:
 			return str(self.user_email)
+	def deactivate(self):
+		self.active = False
+	def reactivate(self):
+		self.active = True
 	def favorite(self, performer):
 		if not self.has_favorited(performer):
 			self.favorites.append(performer)
