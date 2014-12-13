@@ -77,12 +77,15 @@ def confirmdeletion():
 		db.session.commit()
 		flash("Account deletion successful")
 		return redirect(url_for('frontpage'))
-	return render_template('confirmdeletion.html', form=form)
+	return render_template('login.html', form=form, delete=True)
 
 @app.route('/favorites')
 @login_required
 def displayfavorites():
 	user = current_user._get_current_object()
+	if user.isPerformer():
+		flash("Performers do not have a list of favorites")
+		return redirect(url_for('frontpage'))
 	favorite_performers = user.favorites
 	return render_template('favorites.html', favorite_performers=favorite_performers)
 
@@ -90,6 +93,9 @@ def displayfavorites():
 @login_required
 def displayfollowers():
 	performer = current_user._get_current_object()
+	if not performer.isPerformer():
+		flash("Users do not have followers")
+		return redirect(url_for('frontpage'))
 	followers = performer.followers
 	return render_template('followers.html', followers=followers)
 
@@ -130,6 +136,16 @@ def searchperformer():
 		performer = Performer.query.filter_by(name=form.performername.data).first()
 		return render_template('performerpage.html', performer=performer)
 	return render_template('performersearch.html')
+
+@app.route('/upcoming-concerts')
+@login_required
+def displayupcomingconcerts():
+	currentuser = current_user._get_current_object()
+	if currentuser.isPerformer():
+		flash("Performers cannot view this page")
+		return redirect(url_for('frontpage'))
+	concerts = currentuser.followed_concerts()
+	return render_template('concerts.html', concerts=concerts)
 
 @app.route('/all-concerts')
 def displayallconcerts():

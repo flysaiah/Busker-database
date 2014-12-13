@@ -64,9 +64,19 @@ class User(db.Model):
 	def has_favorited(self, performer):
 		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
 	def followed_concerts(self):
-		return Concert.query.join(favorites, (favorites.c.p_email == Performer.performer_email)).filter(favorites.c.u_email == self.user_email)
+		return Concert.query.join(favorites, (favorites.c.p_email == performer.performer_email)).filter(favorites.c.u_email == self.user_email)
 	def isPerformer():
 		return False
+	def attendConcert(self, concert):
+		if not self.is_attending(concert):
+			self.concerts.append(concert)
+			return self
+	def unattendConcert(self, concert):
+		if self.is_attending(concert):
+			self.concerts.remove(concert)
+			return self
+	def is_attending(self, concert):
+		return self.concerts.filter(attendings.c.id_of_concert == concert.generated_id).count() > 0
 
 class Concert(db.Model):
 	generated_id = db.Column(db.Integer, primary_key=True)
