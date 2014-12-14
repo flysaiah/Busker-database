@@ -1,0 +1,12 @@
+{% extends 'form_base.html' %}
+
+{% block form_items %}
+
+{{ form.hidden_tag() }}
+{{ form.byperformer }}
+{{ form.bystreetaddress }}
+{{ form.bycity }}
+{{ form.bystate }}
+<button type="submit">SUBMIT</button>
+
+{% endblock %}

@@ -184,6 +184,7 @@ def searchconcerts():
 			foundperformances = Concert.query.all()
 
 		if form.bystreetaddress.data is not None:
+			return redirect(url_for('frontpage'))
 			for performance in foundperformances:
 				if performance.streetaddress != form.streetaddress.data:
 					foundperformances.remove(performance)
@@ -197,7 +198,7 @@ def searchconcerts():
 					foundperformances.remove(performance)
 		concerts = foundperformances
 		return render_template('concerts.html', concerts=concerts)
-	return render_template('searchconcerts.html')
+	return render_template('searchconcerts.html', form=form)
 
 @app.route('/createconcert', methods=['GET', 'POST'])
 @login_required
