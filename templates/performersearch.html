@@ -1,18 +1,28 @@
 {% extends "form_base.html" %}
 
 
-{% block content %}
-	<form method="POST" action="" class="form-horizontal form-center" role="form">
+
+
+{% block form_items %}
+{% from "_formhelpers.html" import render_field %}
+
+<form method="POST" action="" class="form-horizontal form-center" role="form">
+  	<dl>
+	  	<h3 class="form-center-heading">Search for a performer</h3>
+
 		{{ form.hidden_tag() }}
+
 		<div class="form-group">
-			<label for="performername" class="sr-only">Perfomer</label>
-			{{ form.performername(class="form-control", placeholder="Performer") }}
-		</div>
+	    	{{ render_field(form.performername, class="form-control", placeholder="Performer") }}
+	    </div>
 
-			<div class="form-group">
-			<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">search</button>
-		</div>
-	</form>
 
+ 	</dl>
+  	<div class="form-group">
+		<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Search</button>
+	</div>
+
+	
+</form>
 
 {% endblock %}

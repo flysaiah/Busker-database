@@ -90,6 +90,8 @@ centered form styles
 .form-center .form-control:focus {
   z-index: 2;
 }
+
+/*
 .form-center input[type="email"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
@@ -100,7 +102,7 @@ centered form styles
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-
+*/
 
 /*******************************
 
