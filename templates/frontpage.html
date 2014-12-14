@@ -1,74 +1,40 @@
 {% extends "base.html" %}
 
+{% block header %}
+
+<style>
+body { 
+  min-height: 100%;
+  background: url(http://www.pxleyes.com/images/contests/street-performers-2/fullsize/Street-Performer-4ee18c0dc0ae9_hires.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #FFFFFF;
+}
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-    <!-- Carousel
-    ================================================== -->
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="https://4.bp.blogspot.com/-6zMCsuNZ2Y0/T2-c9ZQM7nI/AAAAAAAA1ew/de2XbzZyX_M/s1600/P3241099.JPG" alt="First slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Wecome to insert name here</h1>
-              <p>The leading service to connect street perfomers with street fans</p>
-              <p><a class="btn btn-lg btn-primary" href="/signup" role="button">Sign up today</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://www.pxleyes.com/images/contests/street-performers-2/fullsize/Street-Performer-4ee18c0dc0ae9_hires.jpg" alt="Second slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>We take street perfoming to another level</h1>
-              <p>By easily networking perfomers with fans and location, everyone wins!</p>
-              <p><a class="btn btn-lg btn-primary" href="/about" role="button">Learn more</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAFVVVQAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Some happy users!</h1>
-              <p>We have users from towns like New Orleans, LA, New York City, and many more, see some of them here!</p>
-              <p><a class="btn btn-lg btn-primary" href="/gallery" role="button">Browse gallery</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div><!-- /.carousel -->
+<div class="site-wrapper">
 
-	<div>
-		<div>	
-			<h1>Welcome to Kirby and Isaiah's amazeballs webpage</h1>
-			<h2>Stuff is still in development, and this page isn't even live yet, so I don't know how you're seeing this, so props to you</h2>
-		</div>
-		<div>
-			<div>
-				<p>Been with us already? try this!</p>				
-				<a href="/login">login here</a>
-			</div>
-			<div>			
-				<p>New user? Try this instead!</p>
-				<a href="/signup">Register here</a>
-			</div>
-		</div>		
-	</div>
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Welcome!</h1>
+            <p class="lead">[Insert name here] provides a direct connection from street performers to the fans on the streets</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
 
 
