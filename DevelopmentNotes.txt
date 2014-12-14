@@ -1,5 +1,7 @@
-Problems:
---Validator messages not showing
-
-Funcionality still missing:
---Performers can delete performances
+GAMEPLAN:
+--Search for nonexistent performer link still pops up (problem)
+--Sign up with an already-used username (problem)
+--Error messages not showing anywhere
+--Links to everything
+--Display "Hello, <User>" on frontpage
+--Display flash messages
