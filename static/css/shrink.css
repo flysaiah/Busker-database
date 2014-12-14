@@ -100,3 +100,15 @@ centered form styles
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+
+/*******************************
+
+flash messages
+
+********************************/
+
+.flashes {
+  margin-top: 20px;
+  color: red;
+}
