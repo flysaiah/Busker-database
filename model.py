@@ -10,6 +10,7 @@ class Performer(db.Model):
 	name = db.Column(db.Text)
 	performer_password = db.Column(db.Text)
 	performances = db.relationship('Concert', secondary=performances, backref=db.backref('performers', lazy='dynamic'), lazy='dynamic')
+	active = db.Column(db.Boolean)
 
 	def __init__(self, performer_email, name, performer_password):
 		self.performer_email = performer_email
@@ -31,9 +32,9 @@ class Performer(db.Model):
 		except NameError:
 			return str(self.performer_email)
 	def deactivate(self):
-		self.active = False
+		self.currentlyactive = False
 	def reactivate(self):
-		self.active = True
+		self.currentlyactive = True
 	def isPerformer():
 		return True
 
@@ -41,11 +42,11 @@ class User(db.Model):
 	user_email = db.Column(db.Text, primary_key=True)
 	user_password = db.Column(db.Text)
 	favorites = db.relationship('Performer', secondary=favorites, backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+	active = db.Column(db.Boolean)
 
 	def __init__(self, user_email, user_password):
 		self.user_email = user_email
 		self.user_password = user_password
-		self.active = True
 	def __repr__(self):
 		return '<User {0}>'.format(self.user_email)
 	def is_authenticated(self):
@@ -59,10 +60,6 @@ class User(db.Model):
 			return unicode(self.user_email)
 		except NameError:
 			return str(self.user_email)
-	def deactivate(self):
-		self.active = False
-	def reactivate(self):
-		self.active = True
 	def favorite(self, performer):
 		if not self.has_favorited(performer):
 			self.favorites.append(performer)

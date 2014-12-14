@@ -72,11 +72,15 @@ def confirmdeletion():
 	form = LoginForm()
 	if form.validate_on_submit():
 		currentuser = current_user._get_current_object()
-		logout_user()
-		currentuser.deactivate()
+		currentuser.active = False
 		flash("Account deletion successful")
 		return redirect(url_for('frontpage'))
 	return render_template('login.html', form=form, delete=True)
+
+@app.route('/test')
+def test():
+	currentuser = current_user._get_current_object()
+	return render_template('test.html', currentuser=currentuser)
 
 @app.route('/favorites')
 @login_required
