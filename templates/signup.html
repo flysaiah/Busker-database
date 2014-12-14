@@ -1,8 +1,7 @@
 {% extends "form_base.html" %}
 
 
-
-{% block form_items %}
+<!--
 	<form method="POST" action"/confirmed" class="form-horizontal form-center" role="form">
 
 		<h2 class="form-center-heading">Signup</h2>
@@ -34,5 +33,37 @@
 
 	</form>
 
+-->
+
+
+
+{% block form_items %}
+{% from "_formhelpers.html" import render_field %}
+
+<form method="POST" action="" class="form-horizontal form-center" role="form">
+  	<dl>
+	  	<h2 class="form-center-heading">Signup</h2>
+
+		{{ form.hidden_tag() }}
+
+		<div class="form-group">
+	    	{{ render_field(form.new_email_username, class="form-control", placeholder="Email") }}
+	    </div>
+	    <div class="form-group">
+	    	{{ render_field(form.new_password, class="form-control", placeholder="Password") }}
+	    </div>
+	    {% if form.performer_name %}
+	    	<div class="form-group">
+	    		{{ render_field(form.performer_name, class="form-control", placeholder="Performer Name") }}
+	    	</div>
+	    {% endif %}
+
+ 	</dl>
+  	<div class="form-group">
+		<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Login</button>
+	</div>
+
+	
+</form>
 
 {% endblock %}

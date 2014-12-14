@@ -1,8 +1,8 @@
 {% extends "form_base.html" %}
 
 
+<!--
 
-{% block form_items %}
 	<form method="POST" action="" class="form-horizontal form-center" role="form">
 
 
@@ -38,10 +38,42 @@
 
 
 	</form>
+-->
 
 
+{% block form_items %}
+{% from "_formhelpers.html" import render_field %}
 
+<form method="POST" action="" class="form-horizontal form-center" role="form">
+  	<dl>
+	  	{% if delete %}
+			<h3 class="form-center-heading">Confirm login to delete</h3>
+		{% else %}
+			<h2 class="form-center-heading">Login</h2>
+		{% endif %}
 
+		{{ form.hidden_tag() }}
 
+		<div class="form-group">
+	    	{{ render_field(form.email_username, class="form-control", placeholder="Email") }}
+	    </div>
+	    <div class="form-group">
+	    	{{ render_field(form.password, class="form-control", placeholder="Password") }}
+	    </div>
+	    <div class="checkbox">
+			<label>
+				{{ form.performer_option }}  Performer?
+			</label>
+		</div>
+
+ 	</dl>
+  	<div class="form-group">
+		<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Login</button>
+	</div>
+
+	{% if not delete %}
+		<a href="/signup"><h4 class="form-center-heading">New? Sign up here!</h4></a>
+	{% endif %}
+</form>
 
 {% endblock %}
