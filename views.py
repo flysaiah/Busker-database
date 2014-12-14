@@ -73,6 +73,8 @@ def confirmdeletion():
 	if form.validate_on_submit():
 		currentuser = current_user._get_current_object()
 		currentuser.active = False
+		db.session.commit()
+		logout_user()
 		flash("Account deletion successful")
 		return redirect(url_for('frontpage'))
 	return render_template('login.html', form=form, delete=True)
