@@ -1,12 +1,23 @@
-{% extends 'base.html' %}
+{% extends "table_base.html" %}
+{% block tablehead %}
+	<thead>
+		<th>#</th>
+		<th>Concert</th>
 
-{% block content %}
+	</thead>
+
+{% endblock %}
+
+
+
+{% block tablebody %}
 
 {% for concert in concerts %}
-
-<div>
-	<p>{{ concert }}</p>
-</div>
+	<tbody>
+		<tr>
+			<td>{{ concert }}</td>
+		</tr>
+	</tbody>
 
 {% endfor %}
 

@@ -1,11 +1,24 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends "table_base.html" %}
+{% block tablehead %}
+	<thead>
+		<th>#</th>
+		<th>Follower</th>
+
+	</thead>
+
+{% endblock %}
+
+
+
+{% block tablebody %}
 
 {% for user in followers %}
-
-	<div>
-		<p>{{ user }}</p>
-	</div>
+	<tbody>
+		<tr>
+			<td>{{ User }}</td>
+		</tr>
+	</tbody>
 
 {% endfor %}
+
 {% endblock %}

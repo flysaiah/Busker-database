@@ -1,10 +1,23 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "table_base.html" %}
+{% block tablehead %}
+	<thead>
+		<th>#</th>
+		<th>Performer</th>
+
+	</thead>
+
+{% endblock %}
+
+
+
+{% block tablebody %}
 
 {% for performer in favorite_performers %}
-	<div>
-		<p>{{ performer }}</p>
-	</div>
+	<tbody>
+		<tr>
+			<td>{{ performer }}</td>
+		</tr>
+	</tbody>
 
 {% endfor %}
 
