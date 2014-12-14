@@ -31,11 +31,7 @@ class Performer(db.Model):
 			return unicode(self.performer_email)
 		except NameError:
 			return str(self.performer_email)
-	def deactivate(self):
-		self.currentlyactive = False
-	def reactivate(self):
-		self.currentlyactive = True
-	def isPerformer():
+	def isPerformer(self):
 		return True
 
 class User(db.Model):
@@ -47,6 +43,7 @@ class User(db.Model):
 	def __init__(self, user_email, user_password):
 		self.user_email = user_email
 		self.user_password = user_password
+		self.active = True
 	def __repr__(self):
 		return '<User {0}>'.format(self.user_email)
 	def is_authenticated(self):
@@ -72,7 +69,7 @@ class User(db.Model):
 		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
 	def followed_concerts(self):
 		return Concert.query.join(favorites, (favorites.c.p_email == performer.performer_email)).filter(favorites.c.u_email == self.user_email)
-	def isPerformer():
+	def isPerformer(self):
 		return False
 	def attendConcert(self, concert):
 		if not self.is_attending(concert):
@@ -104,3 +101,4 @@ class Concert(db.Model):
 		return '<Concert at {0}, {1}>'.format(self.streetaddress, self.time)
 	def addPerformer(self, performer):
 		self.performers.append(performer)
+		return self

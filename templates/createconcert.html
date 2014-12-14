@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method='POST' action="">
+	{{ form.hidden_tag() }}
+	
+	{{ form.time }}
+
+	{{ form.streetaddress }}
+
+	{{ form.city }}
+
+	{{ form.state }}
+
+	{{ form.addperformers }}
+
+	<button type="submit">SUBMIT</button>
+</form>
+
+{% for error in form.addperformers.errors %}
+{{ error }}
+{% endfor %}
+
+{% endblock %}

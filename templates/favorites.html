@@ -1,7 +1,11 @@
 {% extends "base.html" %}
+{% block content %}
 
 {% for performer in favorite_performers %}
-
 	<div>
-		<p>performer.performer_email</p>
+		<p>{{ performer }}</p>
 	</div>
+
+{% endfor %}
+
+{% endblock %}
