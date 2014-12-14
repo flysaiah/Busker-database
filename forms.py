@@ -2,6 +2,7 @@ from flask.ext.wtf import Form
 from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError
 from model import db, User, Performer, Concert
+from flask import render_template
 
 #def uniquecheck(form, field):
 

@@ -137,10 +137,11 @@ def unfollowperformer(performer_email):
 @app.route('/search/performer', methods=['GET', 'POST'])
 def searchperformer():
 	form = PerformerSearchForm()
+	g = form.validate_on_submit()
 	if form.validate_on_submit():
 		performer = Performer.query.filter_by(name=form.performername.data).first()
 		return render_template('performerpage.html', performer=performer)
-	return render_template('performersearch.html', form=form)
+	return render_template('performersearch.html', form=form, g=g)
 
 @app.route('/upcoming-concerts')
 @login_required

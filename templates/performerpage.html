@@ -4,10 +4,10 @@
 {% block content %}
 
 	<div>
-		<p>{% performer.name %}</p>
+		<p>{{ performer.name }}</p>
 	</div>
 
-	<a href="/favorite/{% performer.performer_email %}">Favorite this performer</a>
+	<a href="/favorite/{{ performer.performer_email }}">Favorite this performer</a>
 
 
 

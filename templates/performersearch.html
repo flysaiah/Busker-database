@@ -2,7 +2,8 @@
 
 
 {% block content %}
-	<form method="POST" action"" class="form-horizontal form-center" role="form">
+	<form method="POST" action="" class="form-horizontal form-center" role="form">
+		{{ form.hidden_tag() }}
 		<div class="form-group">
 			<label for="performername" class="sr-only">Perfomer</label>
 			{{ form.performername(class="form-control", placeholder="Performer") }}
