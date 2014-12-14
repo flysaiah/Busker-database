@@ -13,3 +13,31 @@
 
 
 {% endblock %}
+
+
+{% extends "table_base.html" %}
+{% block tablehead %}
+	<thead>
+		<th>#</th>
+		<th>Performer</th>
+		<th>Favorite</th>
+
+	</thead>
+
+{% endblock %}
+
+
+
+{% block tablebody %}
+
+{% for performer in performer %}
+	<tbody>
+		<tr>
+			<td>{{ performer.name }}</td>
+			<td><a href="/favorite/{{ performer.performer_email }}">Favorite this performer</a></td>
+		</tr>
+	</tbody>
+
+{% endfor %}
+
+{% endblock %}
