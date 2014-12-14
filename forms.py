@@ -1,28 +1,25 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, BooleanField, PasswordField
-from wtforms.validators import Required, ValidationError
+from wtforms.validators import Required, ValidationError, Optional
 from model import db, User, Performer, Concert
-from flask import render_template
 
 #def uniquecheck(form, field):
 
 def semiOptional(form, field):
-	if field.data is None and form.bycity.data is None and form.bystate.data is None and form.byperformer.data is None:
+	if field.data == "" and form.bycity.data == "" and form.bystate.data == "" and form.byperformer.data == "":
 		raise ValidationError("Sorry, you must fill in at least one of the fields.")
 
 def realPerformer(form, field):
 	names = form.addperformers.data
-	if names is not None:
-		names = names.replace(" ", "").split(",")
-		for name in names:
-			if Performer.query.get(name) is None:
-				raise ValidationError("Sorry, we have no record of that performer.")
+	names = names.replace(" ", "").split(",")
+	for name in names:
+		if Performer.query.get(name) is None:
+			raise ValidationError("Sorry, we have no record of that performer.")
 
 def realPerformerName(form, field):
 	pname = field.data
-	if pname is not None:
-		if Performer.query.filter_by(name=pname).all() is None:
-			raise ValidationError("Sorry, we have no record of that performer.")
+	if Performer.query.filter_by(name=pname).all() is None:
+		raise ValidationError("Sorry, we have no record of that performer.")
 
 def passwordCheck(form, field):
 	username = form.email_username.data
@@ -51,7 +48,7 @@ class ConcertForm(Form):
 	streetaddress = StringField('streetaddress', validators=[Required()])
 	city = StringField('city', validators=[Required()])
 	state = StringField('state', validators=[Required()])
-	addperformers = StringField('addperformers', validators=[realPerformer])
+	addperformers = StringField('addperformers', validators=[realPerformer, Optional()])
 
 
 class SignupForm(Form):

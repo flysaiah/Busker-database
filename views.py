@@ -91,7 +91,7 @@ def displayfavorites():
 	if user.isPerformer():
 		flash("Performers do not have a list of favorites")
 		return redirect(url_for('frontpage'))
-	favorite_performers = user.favorites
+	favorite_performers = user.favorites.all()
 	return render_template('favorites.html', favorite_performers=favorite_performers)
 
 @app.route('/followers')
@@ -101,7 +101,7 @@ def displayfollowers():
 	if not performer.isPerformer():
 		flash("Users do not have followers")
 		return redirect(url_for('frontpage'))
-	followers = performer.followers
+	followers = performer.followers.all()
 	return render_template('followers.html', followers=followers)
 
 @app.route('/favorite/<performer_email>')
@@ -114,10 +114,13 @@ def followperformer(performer_email):
 		return redirect(url_for('frontpage'))
 	else:
 		favorite_object = user.favorite(performer)
+		if favorite_object is None:
+			flash("You are already following this performer.")
+			return redirect(url_for('frontpage'))
 		db.session.add(favorite_object)
 		db.session.commit()
 		flash("Successfully favorited " + str(performer.name))
-		return redirect(url_for('frontpage')) #Eventually will redirect to wherever the favoriting page is
+		return redirect('/favorites')
 
 @app.route('/unfavorite/<performer_email>')
 @login_required
@@ -129,6 +132,9 @@ def unfollowperformer(performer_email):
 		return redirect(url_for('frontpage'))
 	else:
 		unfavorite_object = user.unfavorite(performer)
+		if unfavorite_object is None:
+			flash("You are not following this performer.")
+			return redirect(url_for('frontpage'))
 		db.session.add(unfavorite_object)
 		db.session.commit()
 		flash("Successfully unfavorited " + str(performer.name))
@@ -205,15 +211,16 @@ def createconcert():
 		db.session.add(newconcert)
 		db.session.commit()
 		performers = []
-		performers.append(currentuser._get_current_object())
-		if form.addperformers.data is not None:
+		performers.append(current_user._get_current_object())
+		if form.addperformers.data:
 			names = form.addperformers.data
 			names = names.replace(" ", "").split(",")
 			for name in names:
 				newperformer = Performer.query.get_or_404(name)
 				performers.append(newperformer)
 		for performer in performers:
-			db.session.add(newconcert.addPerformer())
+			addperformerobject = newconcert.addPerformer(performer)
+			db.session.add(addperformerobject)
 			db.session.commit()
 		flash("Concert created successfully")
 		return redirect(url_for('frontpage'))
@@ -222,7 +229,7 @@ def createconcert():
 @app.route('/concerts/<performeremail>')
 def concertsbyperformer(performeremail):
 	performer = Performer.query.filter_by(performer_email=performeremail).first()
-	concerts = performer.performances
+	concerts = performer.performances.all()
 	return render_template('concerts.html', concerts=concerts)
 
 @app.route('/edit/concert/<concert_id>', methods=['GET', 'POST'])
