@@ -3,7 +3,14 @@ from wtforms.fields import StringField, BooleanField, PasswordField
 from wtforms.validators import Required, ValidationError, Optional
 from model import db, User, Performer, Concert
 
-#def uniquecheck(form, field):
+def uniquecheck(form, field, performer=False):
+	username = form.new_email_username.data
+	if performer:
+		person = Performer.query.get(username)
+	else:
+		person = User.query.get(username)
+	if person is not None:
+		raise ValidationError("Sorry, that email is already in user for an account.")
 
 def semiOptional(form, field):
 	if field.data == "" and form.bycity.data == "" and form.bystate.data == "" and form.byperformer.data == "":
@@ -26,9 +33,9 @@ def passwordCheck(form, field):
 	password = form.password.data
 
 	if form.performer_option.data:
-		person = Performer.query.get_or_404(username)
+		person = Performer.query.get(username)
 	else:
-		person = User.query.get_or_404(username)
+		person = User.query.get(username)
 
 
 	if person is None:
@@ -52,12 +59,12 @@ class ConcertForm(Form):
 
 
 class SignupForm(Form):
-	new_email_username = StringField('new_email_username', validators=[Required()])
+	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck])
 	new_password = PasswordField('new_password', validators=[Required()])
 
 
 class PerformerSignupForm(Form):
-	new_email_username = StringField('new_email_username', validators=[Required("This field is required.")])
+	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck(True)])
 	new_password = PasswordField('new_password', validators=[Required()])
 	performer_name = StringField('performer_name', validators=[Required()])
 
