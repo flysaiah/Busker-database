@@ -162,9 +162,8 @@ def displayupcomingconcerts():
 @app.route('/all-concerts')
 def displayallconcerts():
 	concerts = []
-	for performer in Performer.query.all():
-		for performance in performer.performances:
-			concerts.append(performance)
+	for performance in Concert.query.all():
+		concerts.append(performance)
 	return render_template('concerts.html', concerts=concerts)
 
 @app.route('/special/easteregg')
@@ -176,23 +175,26 @@ def searchconcerts():
 	form = ConcertSearchForm()
 	if form.validate_on_submit():  #Will convert this into a controller function
 		foundperformances = []
-		if form.byperformer.data is not None:
+		if form.byperformer.data != "":
 			performer = Performer.query.filter_by(name=form.byperformer.data).first()
 			for performance in performer.performances:
 				foundperformances.append(performance)
 		else:
 			foundperformances = Concert.query.all()
 
-		if form.bystreetaddress.data is not None:
-			return redirect(url_for('frontpage'))
+		if form.bydate.data is not None:
 			for performance in foundperformances:
-				if performance.streetaddress != form.streetaddress.data:
+				if performance.date != form.bydate.data:
 					foundperformances.remove(performance)
-		if form.bycity.data is not None:
+		if form.bystreetaddress.data != "":
+			for performance in foundperformances:
+				if performance.streetaddress != form.bystreetaddress.data:
+					foundperformances.remove(performance)
+		if form.bycity.data != "":
 			for performance in foundperformances:
 				if performance.city != form.bycity.data:
 					foundperformances.remove(performance)
-		if form.bystate.data is not None:
+		if form.bystate.data != "":
 			for performance in foundperformances:
 				if performance.state != form.bystate.data:
 					foundperformances.remove(performance)
@@ -208,7 +210,7 @@ def createconcert():
 		return redirect(url_for('frontpage'))
 	form = ConcertForm()
 	if form.validate_on_submit():
-		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
+		newconcert = Concert(form.date.data, form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
 		db.session.add(newconcert)
 		db.session.commit()
 		performers = []

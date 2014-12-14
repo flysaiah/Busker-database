@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms.fields import StringField, BooleanField, PasswordField
+from wtforms.fields import StringField, BooleanField, PasswordField, DateField
 from wtforms.validators import Required, ValidationError, Optional
 from model import db, User, Performer, Concert
 
@@ -16,7 +16,7 @@ def uniqueperformercheck(form, field):
 		raise ValidationError("Sorry, that email is already in use for an account.")
 
 def semiOptional(form, field):
-	if field.data == "" and form.bycity.data == "" and form.bystate.data == "" and form.byperformer.data == "":
+	if field.data == "" and form.bycity.data == "" and form.bystate.data == "" and form.byperformer.data == "" and form.bydate.data is None:
 		raise ValidationError("Sorry, you must fill in at least one of the fields.")
 
 def realPerformer(form, field):
@@ -28,7 +28,7 @@ def realPerformer(form, field):
 
 def realPerformerName(form, field):
 	pname = field.data
-	if Performer.query.filter_by(name=pname).all() is None:
+	if Performer.query.filter_by(name=pname).first() is None:
 		raise ValidationError("Sorry, we have no record of that performer.")
 
 def passwordCheck(form, field):
@@ -54,6 +54,7 @@ def passwordCheck(form, field):
 				raise ValidationError("Sorry, that password is incorrect.")
 
 class ConcertForm(Form):
+	date = DateField('date', validators=[Required()])
 	time = StringField('time', validators=[Required()])
 	streetaddress = StringField('streetaddress', validators=[Required()])
 	city = StringField('city', validators=[Required()])
@@ -78,7 +79,8 @@ class LoginForm(Form):
 	performer_option = BooleanField('performer_option')
 	
 class ConcertSearchForm(Form):
-	byperformer = StringField('byperformer', validators=[realPerformerName])
+	byperformer = StringField('byperformer', validators=[Optional(), realPerformerName])
+	bydate = DateField('bydate', validators=[Optional()])
 	bystreetaddress = StringField('bystreetaddress', validators=[semiOptional])
 	bycity = StringField('bycity')
 	bystate = StringField('bystate')
