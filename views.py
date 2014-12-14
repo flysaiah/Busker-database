@@ -4,6 +4,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user
 from flask.ext.security import login_required
 from app import app
 from model import db, User, Performer, Concert
+from datetime import date
 
 
 login_manager = LoginManager()
@@ -246,21 +247,24 @@ def editconcert(concert_id):
 		return redirect(url_for('frontpage'))
 	concert = Concert.query.get_or_404(concert_id)
 	form = ConcertForm()
+	form.date.data = concert.date
 	form.time.data = concert.time
 	form.streetaddress.data = concert.streetaddress
+	form.city.data = concert.city
+	form.state.data = concert.state
 	performerstring = ""
 	for performer in concert.performers:
 		performerstring = performerstring + performer.name + ","
 	performerstring = performerstring[:-1]
 	form.addperformers.data = performerstring
 	if form.validate_on_submit():
-		db.session.delete(concert)
-		db.session.commit()
-		newconcert = Concert(form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
-		db.session.add(newconcert)
-		db.session.commit()
 		performers = []
-		performers.append(currentuser._get_current_object())
+		concert.date = form.bydate.data
+		concert.time = form.bytime.data
+		concert.streetaddress = form.bystreetaddress.data
+		concert.city = form.bycity.data
+		concert.state = form.bystate.data
+		db.session.commit()
 		if form.addperformers.data is not None:
 			names = form.addperformers.data
 			names = names.replace(" ", "").split(",")
@@ -268,8 +272,10 @@ def editconcert(concert_id):
 				newperformer = Performer.query.get_or_404(name)
 				performers.append(newperformer)
 		for performer in performers:
-			db.session.add(newconcert.addPerformer())
-			db.session.commit()
+			addperfobject = concert.addPerformer()
+			if addperfobject is not None:
+				db.session.add(concert.addPerformer())
+				db.session.commit()
 		flash("Concert edited successfully")
 		return redirect(url_for('frontpage'))
 	return render_template('editconcert.html', form=form)
