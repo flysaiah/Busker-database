@@ -41,10 +41,12 @@ class User(db.Model):
 	user_password = db.Column(db.Text)
 	favorites = db.relationship('Performer', secondary=favorites, backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 	active = db.Column(db.Boolean)
+	name = db.Column(db.Text)
 
-	def __init__(self, user_email, user_password):
+	def __init__(self, user_email, user_password, name):
 		self.user_email = user_email
 		self.user_password = user_password
+		self.name = name
 		self.active = True
 	def __repr__(self):
 		return '<User {0}>'.format(self.user_email)

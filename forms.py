@@ -63,6 +63,7 @@ class ConcertForm(Form):
 class SignupForm(Form):
 	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck, Email()])
 	new_password = PasswordField('new_password', validators=[Required()])
+	new_name = StringField('new_name', validators=[Required()])
 
 
 class PerformerSignupForm(Form):

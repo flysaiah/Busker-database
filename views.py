@@ -42,7 +42,7 @@ def about():
 def signup():
 	form = SignupForm()
 	if form.validate_on_submit():
-		newuser = User(form.new_email_username.data, form.new_password.data)
+		newuser = User(form.new_email_username.data, form.new_password.data, form.new_name.data)
 		db.session.add(newuser)
 		db.session.commit()
 		login_user(newuser)
