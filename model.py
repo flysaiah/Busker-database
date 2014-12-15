@@ -1,6 +1,7 @@
 from flask.ext.sqlalchemy import *
 from app import db
 from datetime import date
+from flask import render_template
 
 performances = db.Table('performances', db.Column('email_of_performer', db.Text, db.ForeignKey('performer.performer_email')), db.Column('concert_id', db.Integer, db.ForeignKey('concert.generated_id')))
 favorites = db.Table('favorites', db.Column('p_email', db.Text, db.ForeignKey('performer.performer_email')), db.Column('u_email', db.Text, db.ForeignKey('user.user_email')))
@@ -94,7 +95,7 @@ class Concert(db.Model):
 	attendees = db.relationship('User', secondary=attendings, backref=db.backref('concerts', lazy='dynamic'), lazy='dynamic')
 
 	def __init__(self, date, time, streetaddress, city, state, owner):
-		self.data = date
+		self.date = date
 		self.time = time
 		self.streetaddress = streetaddress
 		self.city = city
