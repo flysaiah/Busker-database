@@ -8,12 +8,10 @@ def uniquecheck(form, field):
 	person = User.query.get(username)
 	if person is not None:
 		raise ValidationError("Sorry, that email is already in use for an account.")
-
-def uniqueperformercheck(form, field):
-	username = form.new_email_username.data
 	person = Performer.query.get(username)
 	if person is not None:
-		raise ValidationError("Sorry, that email is already in use for an account.")
+		raise Validationerror("Sorry, that email is already in use for an account.")
+
 
 def semiOptional(form, field):
 	if field.data == "" and form.bycity.data == "" and form.bystate.data == "" and form.byperformer.data == "" and form.bydate.data is None:
@@ -68,7 +66,7 @@ class SignupForm(Form):
 
 
 class PerformerSignupForm(Form):
-	new_email_username = StringField('new_email_username', validators=[Required(), uniqueperformercheck, Email()])
+	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck, Email()])
 	new_password = PasswordField('new_password', validators=[Required()])
 	performer_name = StringField('performer_name', validators=[Required()])
 

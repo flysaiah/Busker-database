@@ -246,6 +246,8 @@ def editconcert(concert_id):
 		flash("Non-performers cannot edit concerts")
 		return redirect(url_for('frontpage'))
 	concert = Concert.query.get_or_404(concert_id)
+	if current_user._get_current_object().performer_email != concert.owner:
+		flash("Only the creator of the concert can modify it.")
 	form = ConcertForm()
 	if form.validate_on_submit():
 		for performer in concert.performers.all():
@@ -296,6 +298,7 @@ def deleteconcert(concert_id):
 	concert = Concert.query.get_or_404(concert_id)
 	if performeremail != concert.owner:
 		flash("You are not the owner of this concert")
+		return render_template('test.html')
 		return redirect(url_for('concerts', performeremail=performeremail))
 	else:
 		db.session.delete(concert)
