@@ -10,6 +10,7 @@ from datetime import date
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(useremail):
 	if User.query.get(useremail) is None:
@@ -38,6 +39,16 @@ def login():
 @app.route('/about')
 def about():
 	return render_template('about.html')
+
+@app.route('/user_landing')
+@login_required
+def user_landing():
+	return render_template('user_landing.html')
+
+@app.route('/performer_landing')
+@login_required
+def performer_landing():
+	return render_template('performer_landing.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -286,7 +297,7 @@ def deleteconcert(concert_id):
 	performeremail = currentuser.performer_email
 	if not currentuser.isPerformer():
 		flash("Non-performers cannot delete concerts.")
-		return redirect(url_for('user_landing'))
+		return render_template('user_landing.html')
 	concert = Concert.query.get_or_404(concert_id)
 	if performeremail != concert.owner:
 		flash("You are not the owner of this concert")
