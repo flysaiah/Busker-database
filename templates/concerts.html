@@ -4,6 +4,12 @@
 		<th>#</th>
 		<th>Concert</th>
 
+		{% if current_user.isPerformer %}
+			<th>Edit</th>
+			<th>Delete</th>
+
+		{% endif %}
+
 	</thead>
 
 {% endblock %}
@@ -13,11 +19,22 @@
 {% block tablebody %}
 
 {% for concert in concerts %}
-	<tbody>
+	<tbody>	
 		<tr>
+			<td>{{ loop.index }}</td>
 			<td>{{ concert }}</td>
 		</tr>
 	</tbody>
+
+	{% if current_user.isPerformer %}
+
+		{% if current.user == concert.owner %}
+			<td><a class="glyphicon glyphicon-cog" href="/edit/concert/{{ concert.generated_id }}"></a></td>
+			<td><a class="glyphicon glyphicon-trash" href="/deleteconcert/{{ concert.generated_id }}"></a></td>
+
+		{% endif %}
+
+	{% endif %}
 
 {% endfor %}
 

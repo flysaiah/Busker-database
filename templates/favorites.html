@@ -3,6 +3,7 @@
 	<thead>
 		<th>#</th>
 		<th>Performer</th>
+		<th>Unfollow</th>
 
 	</thead>
 
@@ -15,7 +16,10 @@
 {% for performer in favorite_performers %}
 	<tbody>
 		<tr>
+			<td>{{ loop.index }}</td>
 			<td>{{ performer }}</td>
+			<td><a class="glyphicon glyphicon-remove" href="/unfavorite/{{ performer.performer_email }}"></a></td>
+
 		</tr>
 	</tbody>
 
