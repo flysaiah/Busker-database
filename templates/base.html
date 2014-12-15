@@ -59,11 +59,13 @@
               <ul class="dropdown-menu pull-right" role="menu">
                 {% if current_user.isPerformer() %}
                   <li><a href="/createconcert">Create Concert</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
+                  <li><a href="/concerts/{{ current_user.performer_email }}">My Concerts</a></li>
+                  <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
+                  <li><a href="/search/concerts">Search Concerts</a></li>
 
                 {% else %}
                   <li><a href="/favorites">Favorites</a></li>
+                  <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
                   <li><a href="/search/concerts">Search Concerts</a></li>
                   <li><a href="/search/performer">Search Performer</a></li>
                 {% endif %}
