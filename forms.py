@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, BooleanField, PasswordField, DateField
-from wtforms.validators import Required, ValidationError, Optional
+from wtforms.validators import Required, ValidationError, Optional, Email
 from model import db, User, Performer, Concert
 
 def uniquecheck(form, field):
@@ -63,12 +63,12 @@ class ConcertForm(Form):
 
 
 class SignupForm(Form):
-	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck])
+	new_email_username = StringField('new_email_username', validators=[Required(), uniquecheck, Email()])
 	new_password = PasswordField('new_password', validators=[Required()])
 
 
 class PerformerSignupForm(Form):
-	new_email_username = StringField('new_email_username', validators=[Required(), uniqueperformercheck])
+	new_email_username = StringField('new_email_username', validators=[Required(), uniqueperformercheck, Email()])
 	new_password = PasswordField('new_password', validators=[Required()])
 	performer_name = StringField('performer_name', validators=[Required()])
 

@@ -5,3 +5,8 @@ GAMEPLAN:
 --Links to everything
 --Display "Hello, <User>" on frontpage
 --Display flash messages
+
+
+
+return Concert.query.join(favorites, (favorites.c.p_email == Performer.performer_email)).filter(favorites.c.u_email == self.user_email)
+

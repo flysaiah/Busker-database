@@ -68,9 +68,14 @@ class User(db.Model):
 			self.favorites.remove(performer)
 			return self
 	def has_favorited(self, performer):
-		return self.favorites.filter(favorites.c.p_email == Performer.performer_email).count() > 0
+		return self.favorites.filter(favorites.c.p_email == performer.performer_email).count() > 0
 	def followed_concerts(self):
-		return Concert.query.join(favorites, (favorites.c.p_email == Performer.performer_email)).filter(favorites.c.u_email == self.user_email)
+		concerts = []
+		favorite_performers = self.favorites.all()
+		for performer in favorite_performers:
+			for concert in performer.performances.all():
+				concerts.append(concert)
+		return concerts
 	def isPerformer(self):
 		return False
 	def attendConcert(self, concert):
