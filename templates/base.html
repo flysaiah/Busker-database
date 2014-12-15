@@ -44,11 +44,10 @@
           <ul class="nav navbar-nav pull-right">
             {% if current_user.is_authenticated() %}
               {% if current_user.isPerformer() %}
-                <li><a href="/performerlanding">Home</a></li>
+                <li><a href="/performer_landing">Home</a></li>
               {% else %}
-                <li><a href="/userlanding">Home</a></li>
+                <li><a href="/user_landing">Home</a></li>
               {% endif %}
-
             {% else %}
               <li><a href="/">Home</a></li>
             {% endif %}
@@ -62,12 +61,15 @@
                   <li><a href="/concerts/{{ current_user.performer_email }}">My Concerts</a></li>
                   <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
                   <li><a href="/search/concerts">Search Concerts</a></li>
+                  <li><a href="all-concerts"></a>All Concerts</li>
 
                 {% else %}
                   <li><a href="/favorites">Favorites</a></li>
                   <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
                   <li><a href="/search/concerts">Search Concerts</a></li>
                   <li><a href="/search/performer">Search Performer</a></li>
+                  <li><a href="all-concerts"></a>All Concerts</li>
+
                 {% endif %}
                 <li class="divider"></li>
                 <li class="dropdown-header">Account options</li>

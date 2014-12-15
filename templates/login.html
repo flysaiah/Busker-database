@@ -28,7 +28,11 @@
 
  	</dl>
   	<div class="form-group">
-		<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Login</button>
+  		{% if not delete %}
+			<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Login</button>
+  		{% else %}
+			<button type="submit" value="Go" class="btn btn-lg btn-primary btn-block">Delete</button>
+  		{% endif %}
 	</div>
 
 	{% if not delete %}
