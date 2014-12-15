@@ -21,7 +21,7 @@ class Performer(db.Model):
 		self.active = True
 	
 	def __repr__(self):
-		return '<Performer {0}>'.format(self.performer_email)
+		return 'Performer {0}'.format(self.name)
 	def is_authenticated(self):
 		return True
 	def is_active(self):
@@ -49,7 +49,7 @@ class User(db.Model):
 		self.name = name
 		self.active = True
 	def __repr__(self):
-		return '<User {0}>'.format(self.user_email)
+		return 'User {0}'.format(self.name)
 	def is_authenticated(self):
 		return True
 	def is_active(self):
@@ -109,7 +109,7 @@ class Concert(db.Model):
 		self.state = state
 		self.owner = owner
 	def __repr__(self):
-		return '<Concert at {0}, {1}>'.format(self.streetaddress, self.time)
+		return 'Performance on {0} at {1} at {2}, {3}, {4}'.format(self.date, self.time, self.streetaddress, self.city, self.state)
 	def addPerformer(self, performer):
 		self.performers.append(performer)
 		return self
