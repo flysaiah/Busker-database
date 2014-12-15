@@ -10,7 +10,7 @@ def uniquecheck(form, field):
 		raise ValidationError("Sorry, that email is already in use for an account.")
 	person = Performer.query.get(username)
 	if person is not None:
-		raise Validationerror("Sorry, that email is already in use for an account.")
+		raise ValidationError("Sorry, that email is already in use for an account.")
 
 
 def semiOptional(form, field):

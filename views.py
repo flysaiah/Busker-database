@@ -304,5 +304,5 @@ def deleteconcert(concert_id):
 		db.session.delete(concert)
 		db.session.commit()
 		flash("Concert successfully deleted")
-		return redirect(url_for('concerts', performeremail=performeremail))
+		return redirect(url_for('frontpage'))
 	
