@@ -28,10 +28,11 @@ def login():
 		if form.performer_option.data:
 			performer = Performer.query.get_or_404(form.email_username.data)
 			login_user(performer)
+			return redirect(url_for('performer_landing'))
 		else:
 			user = User.query.get_or_404(form.email_username.data)
 			login_user(user)
-		return render_template('frontpage.html')
+			return redirect(url_for('user_landing'))
 	return render_template('login.html', form=form)
 
 @app.route('/about')
@@ -46,7 +47,7 @@ def signup():
 		db.session.add(newuser)
 		db.session.commit()
 		login_user(newuser)
-		return render_template('frontpage.html')
+		return redirect(url_for('user_landing'))
 	return render_template('signup.html', form=form)
 
 @app.route('/signup/performer', methods=['GET', 'POST'])
@@ -57,12 +58,8 @@ def psignup():
 		db.session.add(newperformer)
 		db.session.commit()
 		login_user(newperformer)
-		return render_template('frontpage.html')
+		return redirect(url_for('performer_landing'))
 	return render_template('signup.html', form=form)
-
-@app.route('/signup/confirmed')
-def signupConfirmed():
-	return redirect(url_for('frontpage'))
 
 @app.route('/logout')
 @login_required
@@ -83,18 +80,13 @@ def confirmdeletion():
 		return redirect(url_for('frontpage'))
 	return render_template('login.html', form=form, delete=True)
 
-@app.route('/test')
-def test():
-	currentuser = current_user._get_current_object()
-	return render_template('test.html', currentuser=currentuser)
-
 @app.route('/favorites')
 @login_required
 def displayfavorites():
 	user = current_user._get_current_object()
 	if user.isPerformer():
 		flash("Performers do not have a list of favorites")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('performer_landing'))
 	favorite_performers = user.favorites.all()
 	return render_template('favorites.html', favorite_performers=favorite_performers)
 
@@ -104,7 +96,7 @@ def displayfollowers():
 	performer = current_user._get_current_object()
 	if not performer.isPerformer():
 		flash("Users do not have followers")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('user_landing'))
 	followers = performer.followers.all()
 	return render_template('followers.html', followers=followers)
 
@@ -115,12 +107,12 @@ def followperformer(performer_email):
 	user = current_user._get_current_object()
 	if user.isPerformer():
 		flash("Performers cannot favorite/unfavorite other performers; please create a user account")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('peformer_landing'))
 	else:
 		favorite_object = user.favorite(performer)
 		if favorite_object is None:
 			flash("You are already following this performer.")
-			return redirect(url_for('frontpage'))
+			return redirect('/favorites')
 		db.session.add(favorite_object)
 		db.session.commit()
 		flash("Successfully favorited " + str(performer.name))
@@ -133,12 +125,12 @@ def unfollowperformer(performer_email):
 	user = current_user._get_current_object()
 	if user.isPerformer():
 		flash("Performers cannot favorite/unfavorite")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('performer_landing'))
 	else:
 		unfavorite_object = user.unfavorite(performer)
 		if unfavorite_object is None:
 			flash("You are not following this performer.")
-			return redirect(url_for('frontpage'))
+			return redirect(url_for('user_landing'))
 		db.session.add(unfavorite_object)
 		db.session.commit()
 		flash("Successfully unfavorited " + str(performer.name))
@@ -159,7 +151,7 @@ def displayupcomingconcerts():
 	currentuser = current_user._get_current_object()
 	if currentuser.isPerformer():
 		flash("Performers cannot view this page")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('performer_landing'))
 	concerts = currentuser.followed_concerts()
 	return render_template('concerts.html', concerts=concerts)
 
@@ -211,7 +203,7 @@ def searchconcerts():
 def createconcert():
 	if not current_user._get_current_object().isPerformer():
 		flash("Non-performers cannot create concerts")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('user_landing'))
 	form = ConcertForm()
 	if form.validate_on_submit():
 		newconcert = Concert(form.date.data, form.time.data, form.streetaddress.data, form.city.data, form.state.data, current_user._get_current_object().performer_email)
@@ -230,7 +222,7 @@ def createconcert():
 			db.session.add(addperformerobject)
 			db.session.commit()
 		flash("Concert created successfully")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('performer_landing'))
 	return render_template('createconcert.html', form=form)
 
 @app.route('/concerts/<performeremail>')
@@ -244,7 +236,7 @@ def concertsbyperformer(performeremail):
 def editconcert(concert_id):
 	if not current_user._get_current_object().isPerformer():
 		flash("Non-performers cannot edit concerts")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('user_landing'))
 	concert = Concert.query.get_or_404(concert_id)
 	if current_user._get_current_object().performer_email != concert.owner:
 		flash("Only the creator of the concert can modify it.")
@@ -273,7 +265,7 @@ def editconcert(concert_id):
 				db.session.add(concert.addPerformer(performer))
 				db.session.commit()
 		flash("Concert edited successfully")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('performer_landing'))
 	form.date.data = concert.date
 	form.time.data = concert.time
 	form.streetaddress.data = concert.streetaddress
@@ -294,15 +286,14 @@ def deleteconcert(concert_id):
 	performeremail = currentuser.performer_email
 	if not currentuser.isPerformer():
 		flash("Non-performers cannot delete concerts.")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('user_landing'))
 	concert = Concert.query.get_or_404(concert_id)
 	if performeremail != concert.owner:
 		flash("You are not the owner of this concert")
-		return render_template('test.html')
 		return redirect(url_for('concerts', performeremail=performeremail))
 	else:
 		db.session.delete(concert)
 		db.session.commit()
 		flash("Concert successfully deleted")
-		return redirect(url_for('frontpage'))
+		return redirect(url_for('concerts', performeremail=performeremail))
 	
