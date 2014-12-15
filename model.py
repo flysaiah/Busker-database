@@ -106,3 +106,6 @@ class Concert(db.Model):
 	def addPerformer(self, performer):
 		self.performers.append(performer)
 		return self
+	def removePerformer(self, performer):
+		self.performers.remove(performer)
+		return self

@@ -235,7 +235,7 @@ def createconcert():
 
 @app.route('/concerts/<performeremail>')
 def concertsbyperformer(performeremail):
-	performer = Performer.query.filter_by(performer_email=performeremail).first()
+	performer = Performer.query.get_or_404(performeremail)
 	concerts = performer.performances.all()
 	return render_template('concerts.html', concerts=concerts)
 
@@ -247,23 +247,17 @@ def editconcert(concert_id):
 		return redirect(url_for('frontpage'))
 	concert = Concert.query.get_or_404(concert_id)
 	form = ConcertForm()
-	form.date.data = concert.date
-	form.time.data = concert.time
-	form.streetaddress.data = concert.streetaddress
-	form.city.data = concert.city
-	form.state.data = concert.state
-	performerstring = ""
-	for performer in concert.performers:
-		performerstring = performerstring + performer.name + ","
-	performerstring = performerstring[:-1]
-	form.addperformers.data = performerstring
 	if form.validate_on_submit():
-		performers = []
-		concert.date = form.bydate.data
-		concert.time = form.bytime.data
-		concert.streetaddress = form.bystreetaddress.data
-		concert.city = form.bycity.data
-		concert.state = form.bystate.data
+		for performer in concert.performers.all():
+			rmperfobject = concert.removePerformer(performer)
+			db.session.add(rmperfobject)
+			db.session.commit()
+		performers = [current_user._get_current_object()]
+		concert.date = form.date.data
+		concert.time = form.time.data
+		concert.streetaddress = form.streetaddress.data
+		concert.city = form.city.data
+		concert.state = form.state.data
 		db.session.commit()
 		if form.addperformers.data is not None:
 			names = form.addperformers.data
@@ -272,12 +266,23 @@ def editconcert(concert_id):
 				newperformer = Performer.query.get_or_404(name)
 				performers.append(newperformer)
 		for performer in performers:
-			addperfobject = concert.addPerformer()
+			addperfobject = concert.addPerformer(performer)
 			if addperfobject is not None:
-				db.session.add(concert.addPerformer())
+				db.session.add(concert.addPerformer(performer))
 				db.session.commit()
 		flash("Concert edited successfully")
 		return redirect(url_for('frontpage'))
+	form.date.data = concert.date
+	form.time.data = concert.time
+	form.streetaddress.data = concert.streetaddress
+	form.city.data = concert.city
+	form.state.data = concert.state
+	performerstring = ""
+	for performer in concert.performers:
+		if performer.name != current_user._get_current_object().name:
+			performerstring = performerstring + performer.name + ","
+	performerstring = performerstring[:-1]
+	form.addperformers.data = performerstring
 	return render_template('editconcert.html', form=form)
 
 @app.route('/deleteconcert/<concert_id>')
