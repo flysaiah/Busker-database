@@ -10,11 +10,14 @@
 	<script src="/static/js/shrink.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scaleable=no">
 
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
 
   {% block header %}{% endblock %}
 
 	
-	<title>Buskers, yo</title>
+	<title>BuskerBook</title>
 
   {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -57,17 +60,17 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ current_user.name }} <span class="caret"></span></a>
               <ul class="dropdown-menu pull-right" role="menu">
                 {% if current_user.isPerformer() %}
-                  <li><a href="/createconcert">Create Concert</a></li>
-                  <li><a href="/concerts/{{ current_user.performer_email }}">My Concerts</a></li>
-                  <li><a href="/search/concerts">Search Concerts</a></li>
-                  <li><a href="/all-concerts">All Concerts</a></li>
+                  <li><a href="/createconcert">Create Performance</a></li>
+                  <li><a href="/concerts/{{ current_user.performer_email }}">My Performances</a></li>
+                  <li><a href="/search/concerts">Search Performances</a></li>
+                  <li><a href="/all-concerts">All Performances</a></li>
 
                 {% else %}
                   <li><a href="/favorites">Favorites</a></li>
-                  <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
-                  <li><a href="/search/concerts">Search Concerts</a></li>
+                  <li><a href="/upcoming-concerts">Upcoming Performances</a></li>
+                  <li><a href="/search/concerts">Search Performances</a></li>
                   <li><a href="/search/performer">Search Performer</a></li>
-                  <li><a href="/all-concerts">All Concerts</a></li>
+                  <li><a href="/all-concerts">All Performances</a></li>
 
                 {% endif %}
                 <li class="divider"></li>
