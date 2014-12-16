@@ -23,18 +23,19 @@
 		<tr>
 			<td>{{ loop.index }}</td>
 			<td>{{ concert }}</td>
+			{% if current_user.isPerformer %}
+
+				{% if current_user.performer_email == concert.owner %}
+					<td><a class="glyphicon glyphicon-cog" href="/edit/concert/{{ concert.generated_id }}"></a></td>
+					<td><a class="glyphicon glyphicon-trash" href="/deleteconcert/{{ concert.generated_id }}"></a></td>
+
+				{% endif %}
+
+			{% endif %}
 		</tr>
 	</tbody>
 
-	{% if current_user.isPerformer %}
-
-		{% if current_user.performer_email == concert.owner %}
-			<td><a class="glyphicon glyphicon-cog" href="/edit/concert/{{ concert.generated_id }}"></a></td>
-			<td><a class="glyphicon glyphicon-trash" href="/deleteconcert/{{ concert.generated_id }}"></a></td>
-
-		{% endif %}
-
-	{% endif %}
+	
 
 {% endfor %}
 
