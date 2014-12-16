@@ -28,7 +28,7 @@
 
 	{% if current_user.isPerformer %}
 
-		{% if current.user == concert.owner %}
+		{% if current_user == concert.owner %}
 			<td><a class="glyphicon glyphicon-cog" href="/edit/concert/{{ concert.generated_id }}"></a></td>
 			<td><a class="glyphicon glyphicon-trash" href="/deleteconcert/{{ concert.generated_id }}"></a></td>
 

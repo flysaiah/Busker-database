@@ -38,7 +38,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Isaiah's the bomb!</a>
+          <a class="navbar-brand" href="/">BuskerBook</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav pull-right">
@@ -59,7 +59,6 @@
                 {% if current_user.isPerformer() %}
                   <li><a href="/createconcert">Create Concert</a></li>
                   <li><a href="/concerts/{{ current_user.performer_email }}">My Concerts</a></li>
-                  <li><a href="/upcoming-concerts">Upcoming Concerts</a></li>
                   <li><a href="/search/concerts">Search Concerts</a></li>
                   <li><a href="all-concerts">All Concerts</a></li>
 
